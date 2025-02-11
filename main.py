@@ -1,4 +1,3 @@
-
 from classes.imports import *
 
 # Запуск программы проверка файлов
@@ -18,9 +17,15 @@ def startmessage(message):
 def textmessage(message):
     match (message.text):
         case "💪Я тренер💪":
-            bot.send_message(message.chat.id, "Отлично работаем дальше",reply_markup = buttonsmarkup.retunmarkup("Тренер"))
+            bot.send_message(message.chat.id, "Отлично работаем дальше",
+                             reply_markup = buttonsmarkup.retunmarkup("Тренер"))
         case "🏅Я спортсмен🏅":
-            bot.send_message(message.chat.id, "Отлично работаем дальше", reply_markup=buttonsmarkup.retunmarkup("Спортсмен"))
+            bot.send_message(message.chat.id, "Отлично работаем дальше",
+                             reply_markup=buttonsmarkup.retunmarkup("Спортсмен"))
+        case "🧐Я просто интересуюсь🧐":
+            bot.send_message(message.chat.id, messagestouser.interestinginfo,
+                             reply_markup=buttonsmarkup.retunmarkup("Ссылка на канал"))
+
         case _:
             bot.reply_to(message, messagestouser.wrongcommand, reply_markup = buttonsmarkup.retunmarkup())
 

@@ -11,3 +11,9 @@ https://docs.google.com/spreadsheets/d/1noo1mN5Lb2szS8WgCStMxTqppHW8W-j637OWhVXH
 
 Диаграмма базы данных:
 https://drive.google.com/file/d/16v8sn77W915dq0EsJYHmxPiN3svlTEBC/view
+
+Пример диаграммы возможных состояний:
+1. BOTMAN
+https://app.botman.pro/app/template/view/badit7hlbiowbcek
+2. Drawio
+https://drive.google.com/file/d/1TdxiY40iSqDMBjgmJO_3AoqzclGJV0sc/view?usp=sharing
