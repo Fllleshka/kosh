@@ -1,4 +1,5 @@
 import os
+import sqlite3
 
 class DataBase:
     # Инициализация пути к базе данных
@@ -19,3 +20,98 @@ class DataBase:
         file = open(self.pathdatabase, "w+")
         file.close()
         print("Файл базы данных успешно создан")
+
+    # Инициализация таблиц в базе данных
+    def inittables(self):
+        connection = sqlite3.connect(self.pathdatabase)
+        cursor = connection.cursor()
+
+        # Создаём таблицу town
+        cursor.execute('''
+            CREATE TABLE town(
+                id_town INTEGER PRIMARY KEY AUTOINCREMENT,
+                name varchar(255) NOT NULL)
+        ''')
+        connection.commit()
+        # Заполнение таблицы
+        cursor.execute('''
+            INSERT INTO town(
+                name)
+                VALUES
+                ('Омск'), ('Томск'), ('Москва'), ('Новосибирск'), ('Санкт-Петербург'), ('Сочи'), ('Калининград'),
+                ('Владивосток'), ('Екатеринбург'), ('Казань'), ('Красноярск'), ('Нижний Новгород'), ('Уфа'),
+                ('Самара'), ('Ростов-на-Дону'), ('Краснодар'), ('Пермь'), ('Нижний Воронеж')
+                ''')
+        connection.commit()
+
+        # Создаём таблицу sport_kind
+        cursor.execute('''
+            CREATE TABLE kind_sport(
+                id_kind INTEGER PRIMARY KEY AUTOINCREMENT,
+                name varchar(255) NOT NULL)
+        ''')
+        connection.commit()
+        # Заполнение таблицы
+        cursor.execute('''
+                    INSERT INTO kind_sport(
+                        name)
+                        VALUES
+                        ('Бег'), ('Футбол'), ('Баскетбол'), ('Бокс'), ('Велоспорт'), ('Волейбол'), ('Гольф'),
+                        ('Горные лыжи'), ('Дзюдо'), ('Киберспорт'), ('Коньки'), ('Легкая атлетика'), ('Настольный теннис'),
+                        ('Плавание'), ('Триатлон'), ('Хоккей'), ('Шахматы')
+                        ''')
+        connection.commit()
+
+        # Создаём таблицу level_training
+        cursor.execute('''
+                    CREATE TABLE level_training(
+                        id_level INTEGER PRIMARY KEY AUTOINCREMENT,
+                        name varchar(255) NOT NULL)
+                ''')
+        connection.commit()
+        # Заполнение таблицы
+        cursor.execute('''
+                    INSERT INTO level_training(
+                        name)
+                        VALUES
+                        ('Начинающий'), ('Любитель'), ('Профессионал')
+                        ''')
+        connection.commit()
+
+        # Создаём таблицу accaunt_type
+        cursor.execute('''
+                    CREATE TABLE accaunt_type(
+                        id_type INTEGER PRIMARY KEY AUTOINCREMENT,
+                        name varchar(255) NOT NULL)
+                ''')
+        connection.commit()
+        # Заполнение таблицы
+        cursor.execute('''
+                    INSERT INTO accaunt_type(
+                        name)
+                        VALUES
+                        ('Тренер'), ('Спортсмен'), ('Администратор')
+                        ''')
+        connection.commit()
+
+        # Создаём таблицу users
+        cursor.execute('''
+                    CREATE TABLE users(
+                        id_user INTEGER PRIMARY KEY AUTOINCREMENT,
+                        first_name varchar(255) NOT NULL,
+                        middle_name varchar(255),
+                        last_name varchar(255) NOT NULL,
+                        age INTEGER DEFAULT 0,
+                        rating INTEGER DEFAULT 0,
+                        id_telegram INTEGER,
+                        id_town INTEGER,
+                        id_sport INTEGER,
+                        id_level INTEGER,
+                        id_type INTEGER,
+                        FOREIGN KEY (id_town) REFERENCES town (id_town) ON DELETE SET NULL,
+                        FOREIGN KEY (id_sport) REFERENCES kind_sport (id_sport) ON DELETE SET NULL,
+                        FOREIGN KEY (id_level) REFERENCES level_training (id_level) ON DELETE SET NULL,
+                        FOREIGN KEY (id_type) REFERENCES accaunt_type (id_type) ON DELETE SET NULL
+                        )
+                        ''')
+        connection.commit()

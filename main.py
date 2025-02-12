@@ -4,7 +4,13 @@ from classes.imports import *
 if __name__ == "__main__":
     # Инициализация значений
     data = DataBase(pathtodatabase)
-    data.checkfiledatabase()
+    # Если файл базы данных существует
+    if (data.checkfiledatabase() == True):
+        pass
+    # Если нет, то инициализируем базу
+    else:
+        data.createdatabase()
+        data.inittables()
 
 # Приветственное сообщение (обработка кнопки /start)
 @bot.message_handler(commands=['start'])
@@ -25,7 +31,9 @@ def textmessage(message):
         case "🧐Я просто интересуюсь🧐":
             bot.send_message(message.chat.id, messagestouser.interestinginfo,
                              reply_markup=buttonsmarkup.retunmarkup("Ссылка на канал"))
-
+        case "Получить полезную информацию о спорте":
+            bot.send_message(message.chat.id, messagestouser.interestinginfo,
+                     reply_markup=buttonsmarkup.retunmarkup("Ссылка на канал"))
         case _:
             bot.reply_to(message, messagestouser.wrongcommand, reply_markup = buttonsmarkup.retunmarkup())
 
