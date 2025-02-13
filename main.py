@@ -12,6 +12,10 @@ if __name__ == "__main__":
         data.createdatabase()
         data.inittables()
 
+
+    sql = "SELECT * FROM town"
+    print(data.selectfromdatabase(sql))
+
 # Приветственное сообщение (обработка кнопки /start)
 @bot.message_handler(commands=['start'])
 def startmessage(message):

@@ -23,6 +23,7 @@ class DataBase:
 
     # Инициализация таблиц в базе данных
     def inittables(self):
+        # Подключаемся с базе данных
         connection = sqlite3.connect(self.pathdatabase)
         cursor = connection.cursor()
 
@@ -115,3 +116,32 @@ class DataBase:
                         )
                         ''')
         connection.commit()
+
+        # Закрываем соединение с базой
+        connection.close()
+
+    # Функция выполнения запроса на вывод данных (SELECT) к базе
+    def selectfromdatabase(self, request):
+        # Подключаемся к базе данных
+        connection = sqlite3.connect(self.pathdatabase)
+        cursor = connection.cursor()
+        # Выполнение запроса
+        cursor.execute(request)
+        result = cursor.fetchall()
+        # Закрываем соединение с базой
+        connection.close()
+        # Возвращаем данные
+        return result
+
+    # Функция выполнения запроса на добавление данных (INSERT) к базе
+    def insertintodatabase(self, request):
+        # Подключаемся к базе данных
+        connection = sqlite3.connect(self.pathdatabase)
+        cursor = connection.cursor()
+        # Выполнение запроса
+        cursor.execute(request)
+        result = cursor.commit()
+        # Закрываем соединение с базой
+        connection.close()
+        # Возвращаем данные
+        return result
