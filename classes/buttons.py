@@ -16,8 +16,9 @@ class buttons:
         self.btn6 = telebot.types.KeyboardButton("Найти партнёра для занятий спортом")
         self.btn7 = telebot.types.KeyboardButton("Принять участие в соревнованиях")
         self.btn8 = telebot.types.KeyboardButton("Получить полезную информацию о спорте")
-        self.btn9 = telebot.types.KeyboardButton("Разместить свой профиль тренера")
+        self.btn9 = telebot.types.KeyboardButton("Мой профиль 💪")
         self.btn10 = telebot.types.KeyboardButton("Найти спортсмена")
+        self.btn10 = telebot.types.KeyboardButton("Поехали заполнять")
 
     def retunmarkup(self, role=None):
         # Создание меню
@@ -38,6 +39,10 @@ class buttons:
             case "Ссылка на канал":
                 markup = telebot.types.InlineKeyboardMarkup()
                 markup.add(self.btntelegramchannel)
+            case "Профиль тренера":
+                markup.add(self.btn10)
+            case "Null":
+                pass
             case _:
                 markup.add(self.btn1)
                 markup.add(self.btn2)

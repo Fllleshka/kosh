@@ -10,7 +10,7 @@ if __name__ == "__main__":
     # Если нет, то инициализируем базу
     else:
         data.createdatabase()
-        data.inittables()
+        data.inittables()\
 
 
     sql = "SELECT * FROM town"
@@ -32,14 +32,15 @@ def textmessage(message):
         case "🏅Я спортсмен🏅":
             bot.send_message(message.chat.id, "Отлично работаем дальше",
                              reply_markup=buttonsmarkup.retunmarkup("Спортсмен"))
-        case "🧐Я просто интересуюсь🧐":
+        case "🧐Я просто интересуюсь🧐" | "Получить полезную информацию о спорте":
             bot.send_message(message.chat.id, messagestouser.interestinginfo,
                              reply_markup=buttonsmarkup.retunmarkup("Ссылка на канал"))
-        case "Получить полезную информацию о спорте":
-            bot.send_message(message.chat.id, messagestouser.interestinginfo,
-                     reply_markup=buttonsmarkup.retunmarkup("Ссылка на канал"))
+        case "Мой профиль 💪":
+            bot.send_message(message.chat.id, messagestouser.messagecoachstart,
+                     reply_markup=buttonsmarkup.retunmarkup("Профиль тренера"))
+        case "Поехали заполнять":
+            bot.register_next_step_handler(message, profileinf.first_name)
         case _:
             bot.reply_to(message, messagestouser.wrongcommand, reply_markup = buttonsmarkup.retunmarkup())
-
 # Запуск бесконечного опроса
 bot.infinity_polling()
