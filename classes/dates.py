@@ -30,3 +30,6 @@ class messages:
         self.messagecoachlastname = "Введите свою Фамилию"
         # Сообщение вторичное для ввода фамилии тренера
         self.messagecoachmiddlename = "Введите своё Отчество"
+        # Сообщение для ввода даты рождения
+        self.messagebirthdate = "Введите свою Дату рождения в формате:\n'01.01.2025'"
+
