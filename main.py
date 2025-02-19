@@ -10,11 +10,7 @@ if __name__ == "__main__":
     # Если нет, то инициализируем базу
     else:
         data.createdatabase()
-        data.inittables()\
-
-
-    sql = "SELECT * FROM town"
-    print(data.selectfromdatabase(sql))
+        data.inittables()
 
 # Приветственное сообщение (обработка кнопки /start)
 @bot.message_handler(commands=['start'])
@@ -42,5 +38,6 @@ def textmessage(message):
             bot.register_next_step_handler(message, profileinf.first_name)
         case _:
             bot.reply_to(message, messagestouser.wrongcommand, reply_markup = buttonsmarkup.retunmarkup())
+
 # Запуск бесконечного опроса
 bot.infinity_polling()

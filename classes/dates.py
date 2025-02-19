@@ -32,4 +32,8 @@ class messages:
         self.messagecoachmiddlename = "Введите своё Отчество"
         # Сообщение для ввода даты рождения
         self.messagebirthdate = "Введите свою Дату рождения в формате:\n'01.01.2025'"
+        # Сообщение для ввода города
+        self.messagechoosetown = "Выбери свой город из списка внизу"
+        # Сообщение для ввода типа спорта
+        self.messagechoosetypesport = "Выбери свой спорт из списка внизу"
 
