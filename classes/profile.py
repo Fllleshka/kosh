@@ -140,6 +140,25 @@ class profile:
         levels = []
         for elem in dates:
             levels.append(elem[1])
-        print("===============")
-        print(levels)
-        print("===============")
+        textmessage = self.bot.reply_to(message, self.messagestouser.messagechooselevel,
+                                        reply_markup=self.buttonsmarkup.retunmarkup("Уровень", levels))
+
+        self.bot.register_next_step_handler(textmessage, self.chooseplace)
+
+    def chooseplace(self, message):
+        self.level_date = message.text
+        # Запрос к базе данных по имеющимся городам
+        base = DataBase(pathtodatabase)
+        !!!!!!НАПИСАТЬ ГЕНЕРАЦИЮ ДЛЯ ТАБЛИЦЫ place
+        req = "SELECT * FROM place ORDER BY name"
+        # Полученные из базы данные
+
+        textmessage = self.bot.reply_to(message, self.messagestouser.messagechooseplace,
+                                        reply_markup=self.buttonsmarkup.retunmarkup("Уровень", levels))
+
+        self.bot.register_next_step_handler(textmessage, self.chooseplace)
+
+    # Добавление описания к профилю
+    def descriptionfuncion(self, message):
+
+        self.printdates()
