@@ -145,20 +145,32 @@ class profile:
 
         self.bot.register_next_step_handler(textmessage, self.chooseplace)
 
+    # Выбор места проведения тренировки
     def chooseplace(self, message):
         self.level_date = message.text
         # Запрос к базе данных по имеющимся городам
         base = DataBase(pathtodatabase)
-        !!!!!!НАПИСАТЬ ГЕНЕРАЦИЮ ДЛЯ ТАБЛИЦЫ place
         req = "SELECT * FROM place ORDER BY name"
         # Полученные из базы данные
-
+        dates = base.selectfromdatabase(req)
+        # Формируем список всех типов мест
+        places = []
+        for elem in dates:
+            places.append(elem[1])
         textmessage = self.bot.reply_to(message, self.messagestouser.messagechooseplace,
-                                        reply_markup=self.buttonsmarkup.retunmarkup("Уровень", levels))
+                                        reply_markup=self.buttonsmarkup.retunmarkup("Места", places))
 
-        self.bot.register_next_step_handler(textmessage, self.chooseplace)
+        self.bot.register_next_step_handler(textmessage, self.descriptionfuncion)
 
     # Добавление описания к профилю
     def descriptionfuncion(self, message):
+        self.place_date = message.text
+        # Отправляем сообщение
+        self.bot.reply_to(message, self.messagestouser.messagedescription,
+                          reply_markup=self.buttonsmarkup.retunmarkup("Null"))
+        self.bot.register_next_step_handler(message, self.sendalldatestoserver)
 
+    # Отправка данных на сервер
+    def sendalldatestoserver(self, message):
+        self.description_date = message.text
         self.printdates()

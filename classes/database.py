@@ -95,6 +95,22 @@ class DataBase:
                         ''')
         connection.commit()
 
+        # Создаём таблицу place
+        cursor.execute('''
+                            CREATE TABLE place(
+                                id_place INTEGER PRIMARY KEY AUTOINCREMENT,
+                                name varchar(255) NOT NULL)
+                        ''')
+        connection.commit()
+        # Заполнение таблицы
+        cursor.execute('''
+                            INSERT INTO place(
+                                name)
+                                VALUES
+                                ('Спортивный клуб/зал'), ('Улица'), ('Онлайн'), ('В любом месте')
+                                ''')
+        connection.commit()
+
         # Создаём таблицу users
         cursor.execute('''
                     CREATE TABLE users(
@@ -102,17 +118,20 @@ class DataBase:
                         first_name varchar(255) NOT NULL,
                         middle_name varchar(255),
                         last_name varchar(255) NOT NULL,
-                        age INTEGER DEFAULT 0,
+                        birth_date TEXT,
                         rating INTEGER DEFAULT 0,
                         id_telegram INTEGER,
                         id_town INTEGER,
                         id_sport INTEGER,
                         id_level INTEGER,
                         id_type INTEGER,
+                        id_plase INTEGER,
+                        descpiption,
                         FOREIGN KEY (id_town) REFERENCES town (id_town) ON DELETE SET NULL,
                         FOREIGN KEY (id_sport) REFERENCES kind_sport (id_sport) ON DELETE SET NULL,
                         FOREIGN KEY (id_level) REFERENCES level_training (id_level) ON DELETE SET NULL,
-                        FOREIGN KEY (id_type) REFERENCES accaunt_type (id_type) ON DELETE SET NULL
+                        FOREIGN KEY (id_type) REFERENCES accaunt_type (id_type) ON DELETE SET NULL,
+                        FOREIGN KEY (id_plase) REFERENCES place (id_plase) ON DELETE SET NULL
                         )
                         ''')
         connection.commit()
