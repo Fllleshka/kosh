@@ -67,9 +67,12 @@ class buttons:
                         button2 = telebot.types.KeyboardButton(dates[elem + 1])
                         markup.add(button1, button2)
 
-            case "Уровень" | "Места":
+            case "Уровень" | "Места" | "Тип аккаунта":
                 for elem in dates:
                     markup.add(elem)
+
+            case "Отправить данные на сервер":
+                markup.add(self.sendinformation)
 
             case _:
                 markup.add(self.btn1)

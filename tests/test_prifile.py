@@ -25,5 +25,5 @@ class profileTestCase():
         testclass.town(None)
 
 test = profileTestCase()
-#test.testprintdates()
-test.testselectfromdatabase()
+test.testprintdates()
+#test.testselectfromdatabase()

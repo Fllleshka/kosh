@@ -4,14 +4,19 @@ tokenbot = "7812465689:AAHP_i1P6zoh8_0Q_d_-ec-5_pYNzmtpEe0"
 # Путь к базе данных:
 pathtodatabase = "database/maindatabase.db"
 
+# Путь к папке с фотографиями пользователей
+pathtoimagesusers = "images/users/"
+
 # Путь к телеграмм каналу: Надо заменить ссылку!
 telegrampath = "https://t.me/Wylsared"
 
 # Класс картинок
 class images:
     def __init__(self):
-        #Стартовая картинка в приветсвтенном сообщении
+        # Стартовая картинка в приветственном сообщении
         self.startimage = "images/startimage.png"
+        # Первоначальная картинка каждого профиля
+        self.startuserimage = "images/startimage.png"
 
 # Класс сообщений
 class messages:
@@ -40,6 +45,11 @@ class messages:
         self.messagechooselevel = "Выбери свой уровень"
         # Сообщение для ввода типа помещения
         self.messagechooseplace = "Выбери место где будем тренироваться"
+        # Сообщение для ввода типа аккаунта
+        self.messagechooseaccaunttype = "Выбери тип аккаунта"
+        # Сообщение для отправки фотографии аккаунта
+        self.messageimageuser = "Отправь мне свою фотографию, чтобы прикрепить её к профилю"
         # Сообщение для ввода описания к анкете
         self.messagedescription = "Напиши пожалуйста небольшое описание, к своей анкете"
-
+        # Сообщение для ввода описания к анкете
+        self.messagefinalregistration = "Отлично!\nДавай посмотрим что мы сделали."

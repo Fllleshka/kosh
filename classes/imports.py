@@ -16,4 +16,4 @@ messagestouser = messages()
 # Инициализация картинок
 imagestouser = images()
 # Инициалзиация класса отвечающего за профиль
-profileinf = profile(bot, messagestouser, buttonsmarkup)
+profileinf = profile(bot, messagestouser, buttonsmarkup, imagestouser)
