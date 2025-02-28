@@ -267,4 +267,11 @@ class profile:
         self.bot.register_next_step_handler(message, self.sendalldatestoserver2)
 
     def sendalldatestoserver2(self,message):
-        pass
+        # Формируем данные для INSERT в базу данных
+        dates = [self.first_name_date, self.middle_name_date, self.last_name_date, self.birth_date_date,
+                 self.raiting, self.telegramid, self.town_date, self.typesport_date, self.level_date, self.place_date,
+                 self.description_date]
+        print(dates)
+        # данные для добавления
+        #people = [("Sam", 28), ("Alice", 33), ("Kate", 25)]
+        #cursor.executemany("INSERT INTO people (name, age) VALUES (%s, %s)", people)

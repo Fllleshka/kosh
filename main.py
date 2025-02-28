@@ -36,6 +36,8 @@ def textmessage(message):
                      reply_markup=buttonsmarkup.retunmarkup("Профиль тренера"))
         case "Поехали заполнять":
             bot.register_next_step_handler(message, profileinf.first_name)
+        case "Найти тренера":
+            bot.register_next_step_handler(message, searchprof.printdates)
         case _:
             bot.reply_to(message, messagestouser.wrongcommand, reply_markup = buttonsmarkup.retunmarkup())
 

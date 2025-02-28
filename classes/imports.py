@@ -6,6 +6,8 @@ from classes.dates import *
 from classes.buttons import *
 # Файл для работы с профилем
 from classes.profile import *
+# Файл для работы с поиском
+from classes.search import *
 
 # Инициализация бота
 bot = telebot.TeleBot(tokenbot)
@@ -17,3 +19,5 @@ messagestouser = messages()
 imagestouser = images()
 # Инициалзиация класса отвечающего за профиль
 profileinf = profile(bot, messagestouser, buttonsmarkup, imagestouser)
+# Инициализация класса отвечающего за поиск
+searchprof = searchprofiles(bot)
