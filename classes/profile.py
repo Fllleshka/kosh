@@ -25,12 +25,17 @@ class profile:
         self.birth_date_date = ""
         self.raiting = 0
         self.telegramid = None
-        self.town_date = ""
-        self.typesport_date = ""
 
+        self.town_date = ""
+        self.town_date_name = ""
+        self.typesport_date = ""
+        self.typesport_date_name = ""
         self.level_date = ""
+        self.level_date_name = ""
         self.place_date = ""
+        self.place_date_name = ""
         self.accaunt_type = ""
+        self.accaunt_type_name = ""
         self.description_date = ""
 
     # Вывод всех данных
@@ -42,11 +47,11 @@ class profile:
         print(f"Возраст: \t\t\t\t{self.calc_age(self.birth_date_date)}\t{self.birth_date_date}")
         print(f"Рейтинг: \t\t\t\t{self.raiting}")
         print(f"TelegramID: \t\t\t{self.telegramid}")
-        print(f"Город: \t\t\t\t\t{self.town_date}")
-        print(f"Вид спорта: \t\t\t{self.typesport_date}")
-        print(f"Уровень подготовки: \t{self.level_date}")
-        print(f"Место проведения: \t\t{self.place_date}")
-        print(f"Тип аккаунта: \t\t\t{self.accaunt_type}")
+        print(f"Город: \t\t\t\t\t{self.town_date}\t{self.town_date_name}")
+        print(f"Вид спорта: \t\t\t{self.typesport_date}\t{self.typesport_date_name}")
+        print(f"Уровень подготовки: \t{self.level_date}\t{self.level_date_name}")
+        print(f"Место проведения: \t\t{self.place_date}\t{self.place_date_name}")
+        print(f"Тип аккаунта: \t\t\t{self.accaunt_type}\t{self.accaunt_type_name}")
         print(f"Описание: \t\t\t\t{self.description_date}")
         print("==================")
 
@@ -106,6 +111,8 @@ class profile:
                 print("Ошибка обработки запроса")
         return id
 
+    # Функция вычисления
+
     # Добавление имя для тренера, а так же определяем telegramid
     def first_name(self, message):
         # Определяем telegramId
@@ -158,6 +165,7 @@ class profile:
 
     # Выбор типа спорта
     def type_sport(self, message):
+        self.town_date_name = message.text
         self.town_date = self.seart_id_in_database(message.text, "town")
         # Запрос к базе данных по имеющимся
         base = DataBase(pathtodatabase)
@@ -175,6 +183,7 @@ class profile:
 
     # Выбор типа спорта
     def level_training(self, message):
+        self.typesport_date_name = message.text
         self.typesport_date = self.seart_id_in_database(message.text, "type_sport")
         # Запрос к базе данных по имеющимся городам
         base = DataBase(pathtodatabase)
@@ -192,6 +201,7 @@ class profile:
 
     # Выбор места проведения тренировки
     def chooseplace(self, message):
+        self.level_date_name = message.text
         self.level_date = self.seart_id_in_database(message.text, "level_training")
         # Запрос к базе данных по имеющимся городам
         base = DataBase(pathtodatabase)
@@ -209,6 +219,7 @@ class profile:
 
     # Выбор типа аккаунта
     def chooseType_accaunt(self, message):
+        self.place_date_name = message.text
         self.place_date = self.seart_id_in_database(message.text, "place")
         # Запрос к базе данных по имеющимся городам
         base = DataBase(pathtodatabase)
@@ -218,7 +229,8 @@ class profile:
         # Формируем список всех типов мест
         types = []
         for elem in dates:
-            types.append(elem[1])
+            if elem[1] != "Администратор":
+                types.append(elem[1])
         textmessage = self.bot.reply_to(message, self.messagestouser.messagechooseaccaunttype,
                                         reply_markup=self.buttonsmarkup.retunmarkup("Тип аккаунта", types))
 
@@ -226,6 +238,7 @@ class profile:
 
     # Добавление описания к профилю
     def descriptionfuncion(self, message):
+        self.accaunt_type_name = message.text
         self.accaunt_type = self.seart_id_in_database(message.text, "accaunt_type")
         # Отправляем сообщение
         self.bot.reply_to(message, self.messagestouser.messagedescription,
@@ -251,14 +264,14 @@ class profile:
                           reply_markup=self.buttonsmarkup.retunmarkup("Null"))
         self.printdates()
 
-        messagetosenduser = "1. Фамилия Имя Отчество\n" + self.first_name_date + " " + self.last_name_date + " " + self.middle_name_date + "\n"
-        messagetosenduser += "2. Возраст:\n" + str(self.calc_age(self.birth_date_date)) + "\n"
-        messagetosenduser += "3. Город:\n" + str(self.town_date) + "\n"
-        messagetosenduser += "4. Вид спорта:\n" + str(self.typesport_date) + "\n"
-        messagetosenduser += "5. Уровень подготовки:\n" + str(self.level_date) + "\n"
-        messagetosenduser += "6. Место проведения:\n" + str(self.place_date) + "\n"
-        messagetosenduser += "7. Тип аккаунта:\n" + str(self.accaunt_type) + "\n"
-        messagetosenduser += "8. Описание:\n" + self.description_date + "\n\n"
+        messagetosenduser = "1. Фамилия Имя Отчество\n          " + self.last_name_date + " " + self.first_name_date + " " + self.middle_name_date + "\n"
+        messagetosenduser += "2. Возраст:\n          " + str(self.calc_age(self.birth_date_date)) + "\n"
+        messagetosenduser += "3. Город:\n          " + str(self.town_date_name) + "\n"
+        messagetosenduser += "4. Вид спорта:\n          " + str(self.typesport_date_name) + "\n"
+        messagetosenduser += "5. Уровень подготовки:\n          " + str(self.level_date_name) + "\n"
+        messagetosenduser += "6. Место проведения:\n          " + str(self.place_date_name) + "\n"
+        messagetosenduser += "7. Тип аккаунта:\n          " + str(self.accaunt_type_name) + "\n"
+        messagetosenduser += "8. Описание:\n          " + self.description_date + "\n\n"
         messagetosenduser += "⬇️Если всё ок, то нажми нажми внизу⬇️"
 
         self.bot.send_photo(message.chat.id, open(self.imagestouser.startuserimage, 'rb'),
