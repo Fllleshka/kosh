@@ -23,7 +23,7 @@ class DataBase:
 
     # Инициализация таблиц в базе данных
     def inittables(self):
-        # Подключаемся с базе данных
+        # Подключаемся к базе данных
         connection = sqlite3.connect(self.pathdatabase)
         cursor = connection.cursor()
 
@@ -122,16 +122,16 @@ class DataBase:
                         rating INTEGER DEFAULT 0,
                         id_telegram INTEGER,
                         id_town INTEGER,
-                        id_sport INTEGER,
+                        id_kind INTEGER,
                         id_level INTEGER,
                         id_type INTEGER,
-                        id_plase INTEGER,
-                        descpiption,
+                        id_place INTEGER,
+                        description TEXT,
                         FOREIGN KEY (id_town) REFERENCES town (id_town) ON DELETE SET NULL,
-                        FOREIGN KEY (id_sport) REFERENCES kind_sport (id_sport) ON DELETE SET NULL,
+                        FOREIGN KEY (id_kind) REFERENCES kind_sport (id_kind) ON DELETE SET NULL,
                         FOREIGN KEY (id_level) REFERENCES level_training (id_level) ON DELETE SET NULL,
                         FOREIGN KEY (id_type) REFERENCES accaunt_type (id_type) ON DELETE SET NULL,
-                        FOREIGN KEY (id_plase) REFERENCES place (id_plase) ON DELETE SET NULL
+                        FOREIGN KEY (id_place) REFERENCES place (id_place) ON DELETE SET NULL
                         )
                         ''')
         connection.commit()

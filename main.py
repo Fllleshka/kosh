@@ -1,3 +1,5 @@
+from telebot.apihelper import download_file
+
 from classes.imports import *
 
 # Запуск программы проверка файлов
@@ -40,6 +42,7 @@ def textmessage(message):
             bot.register_next_step_handler(message, searchprof.printdates)
         case _:
             bot.reply_to(message, messagestouser.wrongcommand, reply_markup = buttonsmarkup.retunmarkup())
+
 
 # Запуск бесконечного опроса
 bot.infinity_polling()

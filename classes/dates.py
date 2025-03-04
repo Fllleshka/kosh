@@ -53,3 +53,5 @@ class messages:
         self.messagedescription = "Напиши пожалуйста небольшое описание, к своей анкете"
         # Сообщение для ввода описания к анкете
         self.messagefinalregistration = "Отлично!\nДавай посмотрим что мы сделали."
+        # Сообщения для успешной записи в базу данных
+        self.messageinsertdatesindatabase = "Поздравляю, ты теперь вместе с нами!"

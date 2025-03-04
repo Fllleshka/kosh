@@ -14,6 +14,7 @@ class profile:
     # Инициализация переменных
     def __init__(self, bot, messagestouser, buttonsmarkup, imagestouser):
         self.bot = bot
+        self.pathdatabase = pathtodatabase
         self.messagestouser = messagestouser
         self.buttonsmarkup = buttonsmarkup
         self.imagestouser = imagestouser
@@ -181,7 +182,7 @@ class profile:
                                         reply_markup=self.buttonsmarkup.retunmarkup("Тип спорта", sports))
         self.bot.register_next_step_handler(textmessage, self.level_training)
 
-    # Выбор типа спорта
+    # Выбор уровня подготовки
     def level_training(self, message):
         self.typesport_date_name = message.text
         self.typesport_date = self.seart_id_in_database(message.text, "type_sport")
@@ -248,6 +249,8 @@ class profile:
     # Добавление фотографии к профилю
     def createfolderandsendphoto(self, message):
         self.description_date = message.text
+
+
         # Создаём папку для пользователя
         pathdirectory = pathtoimagesusers + str(self.telegramid) + "/"
         if not os.path.exists(pathdirectory):
@@ -259,12 +262,22 @@ class profile:
 
     # Отправка данных на сервер
     def sendalldatestoserver1(self, message, path):
+        # Обработка сохранения картинки на сервер
+        image = message.photo[-1]
+        fileinfo = self.bot.get_file(image.file_id)
+        downloaded_file = self.bot.download_file(fileinfo.file_path)
+        print(message.chat.id)
+        print(type(message.chat.id))
+        save_path = 'images/users/' + str(message.chat.id) + "/profile.png"
+        with open(save_path, 'wb') as new_file:
+            new_file.write(downloaded_file)
+
         # Отправляем сообщение
         self.bot.reply_to(message, self.messagestouser.messagefinalregistration,
                           reply_markup=self.buttonsmarkup.retunmarkup("Null"))
         self.printdates()
 
-        messagetosenduser = "1. Фамилия Имя Отчество\n          " + self.last_name_date + " " + self.first_name_date + " " + self.middle_name_date + "\n"
+        messagetosenduser = "1. Фамилия Имя Отчество:\n          " + self.last_name_date + " " + self.first_name_date + " " + self.middle_name_date + "\n"
         messagetosenduser += "2. Возраст:\n          " + str(self.calc_age(self.birth_date_date)) + "\n"
         messagetosenduser += "3. Город:\n          " + str(self.town_date_name) + "\n"
         messagetosenduser += "4. Вид спорта:\n          " + str(self.typesport_date_name) + "\n"
@@ -281,10 +294,23 @@ class profile:
 
     def sendalldatestoserver2(self,message):
         # Формируем данные для INSERT в базу данных
-        dates = [self.first_name_date, self.middle_name_date, self.last_name_date, self.birth_date_date,
-                 self.raiting, self.telegramid, self.town_date, self.typesport_date, self.level_date, self.place_date,
-                 self.description_date]
-        print(dates)
-        # данные для добавления
-        #people = [("Sam", 28), ("Alice", 33), ("Kate", 25)]
-        #cursor.executemany("INSERT INTO people (name, age) VALUES (%s, %s)", people)
+        insertdates = [self.first_name_date, self.middle_name_date, self.last_name_date, self.birth_date_date, self.raiting, self.telegramid,
+                 self.town_date, self.typesport_date, self.level_date, self.typesport_date, self.place_date, self.description_date]
+        print(insertdates)
+        # Добавление данных в базу данных
+        # Подключаемся к базе данных
+        connection = sqlite3.connect(self.pathdatabase)
+        cursor = connection.cursor()
+        # Запрос на добавление в таблицу
+        request = "INSERT INTO "
+        request += "users (first_name, middle_name, last_name, birth_date, rating, id_telegram, "
+        request += "id_town, id_kind, id_level, id_type, id_place, description) "
+        request += "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+        print(request)
+        cursor.executemany(request, insertdates)
+        connection.commit()
+        connection.close()
+
+        # Отправка сообщения, что данные успешно записаны
+        self.bot.reply_to(message, self.messagestouser.messageinsertdatesindatabase,
+                          reply_markup=self.buttonsmarkup.retunmarkup("Null"))
