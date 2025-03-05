@@ -18,7 +18,9 @@ if __name__ == "__main__":
 @bot.message_handler(commands=['start'])
 def startmessage(message):
     # Отправка сообщения
-    bot.send_photo(message.chat.id, photo=open(imagestouser.startimage, 'rb'), caption=messagestouser.welcomemessage, reply_markup = buttonsmarkup.retunmarkup())
+    bot.send_photo(message.chat.id, photo=open(imagestouser.startimage, 'rb'),
+                   caption=messagestouser.welcomemessage,
+                   reply_markup = buttonsmarkup.retunmarkup())
 
 # Обработка отправленного текста (кнопки)
 @bot.message_handler(content_types= ['text'])
@@ -34,10 +36,15 @@ def textmessage(message):
             bot.send_message(message.chat.id, messagestouser.interestinginfo,
                              reply_markup=buttonsmarkup.retunmarkup("Ссылка на канал"))
         case "Мой профиль 💪":
+            # Проверка на существование профиля в базе данных
+            if (profileinf.existencecheck(message) == False):
+                profileinf.first_name(message)
+            else:
+                bot.send_message(message.chat.id, messagestouser.messageprofilealreadyexists,
+                                 reply_markup=buttonsmarkup.retunmarkup("Отредактировать профиль"))
+        case "Поехали заполнять":
             bot.send_message(message.chat.id, messagestouser.messagecoachstart,
                      reply_markup=buttonsmarkup.retunmarkup("Профиль тренера"))
-        case "Поехали заполнять":
-            profileinf.first_name(message)
         case "Найти тренера":
             bot.register_next_step_handler(message, searchprof.printdates)
         case _:

@@ -21,6 +21,8 @@ class buttons:
 
         self.btntelegramchannel = telebot.types.InlineKeyboardButton("Kosh Sports", telegrampath)
         self.sendinformation = telebot.types.KeyboardButton("Отправить данные на сервер")
+        self.changeprofileinfo = self.btn10 = telebot.types.KeyboardButton("Отредактировать профиль")
+
 
     def retunmarkup(self, role=None, dates=None):
         # Создание меню
@@ -73,6 +75,9 @@ class buttons:
 
             case "Отправить данные на сервер":
                 markup.add(self.sendinformation)
+
+            case "Отредактировать профиль":
+                markup.add(self.changeprofileinfo)
 
             case _:
                 markup.add(self.btn1)

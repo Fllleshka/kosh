@@ -39,6 +39,26 @@ class profile:
         self.accaunt_type_name = ""
         self.description_date = ""
 
+    # Проверка на существование профиля в базе данных
+    def existencecheck(self, message):
+        # Определяем telegramId
+        self.telegramid = message.chat.id
+        print(self.telegramid)
+        # Запрос со всеми telegramid которые есть в базе
+        base = DataBase(pathtodatabase)
+        request = "SELECT id_telegram FROM users"
+        # Полученные из базы данные
+        dates = base.selectfromdatabase(request)
+        # Формируем список всех типов мест
+        print(dates)
+
+        # Если такой id есть в системе возвращаем True
+        if self.telegramid == 1871580124:
+            return True
+
+        else:
+            return False
+
     # Вывод всех данных
     def printdates(self):
         print("==================")
@@ -111,8 +131,6 @@ class profile:
             case _:
                 print("Ошибка обработки запроса")
         return id
-
-    # Функция вычисления
 
     # Добавление имя для тренера, а так же определяем telegramid
     def first_name(self, message):
@@ -260,7 +278,7 @@ class profile:
                           reply_markup=self.buttonsmarkup.retunmarkup("Null"))
         self.bot.register_next_step_handler(message, self.sendalldatestoserver1, pathdirectory)
 
-    # Отправка данных на сервер
+    # Сохранение картинки в папку
     def sendalldatestoserver1(self, message, path):
         # Обработка сохранения картинки на сервер
         image = message.photo[-1]
@@ -292,22 +310,18 @@ class profile:
                             reply_markup=self.buttonsmarkup.retunmarkup("Отправить данные на сервер"))
         self.bot.register_next_step_handler(message, self.sendalldatestoserver2)
 
+    # Записываем данные в базу данных
     def sendalldatestoserver2(self,message):
         # Формируем данные для INSERT в базу данных
-        insertdates = [self.first_name_date, self.middle_name_date, self.last_name_date, self.birth_date_date, self.raiting, self.telegramid,
-                 self.town_date, self.typesport_date, self.level_date, self.typesport_date, self.place_date, self.description_date]
-        print(insertdates)
+        insertdates = (self.first_name_date, self.middle_name_date, self.last_name_date, self.birth_date_date, self.raiting, self.telegramid,
+                 self.town_date, self.typesport_date, self.level_date, self.typesport_date, self.place_date, self.description_date)
         # Добавление данных в базу данных
         # Подключаемся к базе данных
         connection = sqlite3.connect(self.pathdatabase)
         cursor = connection.cursor()
         # Запрос на добавление в таблицу
-        request = "INSERT INTO "
-        request += "users (first_name, middle_name, last_name, birth_date, rating, id_telegram, "
-        request += "id_town, id_kind, id_level, id_type, id_place, description) "
-        request += "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
-        print(request)
-        cursor.executemany(request, insertdates)
+        request = "INSERT INTO users (first_name, middle_name, last_name, birth_date, rating, id_telegram, id_town, id_kind, id_level, id_type, id_place, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+        cursor.execute(request, insertdates)
         connection.commit()
         connection.close()
 
