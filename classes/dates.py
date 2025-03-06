@@ -17,6 +17,10 @@ class images:
         self.startimage = "images/startimage.png"
         # Первоначальная картинка каждого профиля
         self.startuserimage = "images/startimage.png"
+        # Путь к папке с файлами профилей
+        self.startpathprofile = "images/users/"
+        # Название картинки в профиле
+        self.endpathprofile = "/profile.png"
 
 # Класс сообщений
 class messages:

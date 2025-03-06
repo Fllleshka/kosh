@@ -44,7 +44,6 @@ class profile:
         flag = False
         # Определяем telegramId
         self.telegramid = message.chat.id
-        print(self.telegramid)
         # Запрос со всеми telegramid которые есть в базе
         base = DataBase(pathtodatabase)
         request = "SELECT id_telegram FROM users"
@@ -265,8 +264,6 @@ class profile:
     # Добавление фотографии к профилю
     def createfolderandsendphoto(self, message):
         self.description_date = message.text
-
-
         # Создаём папку для пользователя
         pathdirectory = pathtoimagesusers + str(self.telegramid) + "/"
         if not os.path.exists(pathdirectory):
@@ -282,16 +279,13 @@ class profile:
         image = message.photo[-1]
         fileinfo = self.bot.get_file(image.file_id)
         downloaded_file = self.bot.download_file(fileinfo.file_path)
-        print(message.chat.id)
-        print(type(message.chat.id))
-        save_path = 'images/users/' + str(message.chat.id) + "/profile.png"
+        save_path = 'images/users/' + str(message.chat.id) + self.imagestouser.endpathprofile
         with open(save_path, 'wb') as new_file:
             new_file.write(downloaded_file)
 
         # Отправляем сообщение
         self.bot.reply_to(message, self.messagestouser.messagefinalregistration,
                           reply_markup=self.buttonsmarkup.retunmarkup("Null"))
-        self.printdates()
 
         messagetosenduser = "1. Фамилия Имя Отчество:\n          " + self.last_name_date + " " + self.first_name_date + " " + self.middle_name_date + "\n"
         messagetosenduser += "2. Возраст:\n          " + str(self.calc_age(self.birth_date_date)) + "\n"
@@ -303,26 +297,33 @@ class profile:
         messagetosenduser += "8. Описание:\n          " + self.description_date + "\n\n"
         messagetosenduser += "⬇️Если всё ок, то нажми нажми внизу⬇️"
 
-        self.bot.send_photo(message.chat.id, open(self.imagestouser.startuserimage, 'rb'),
+        # Формирование пути к фактографии
+        pathurl = self.imagestouser.startpathprofile + str(self.telegramid) + self.imagestouser.endpathprofile
+
+        self.bot.send_photo(message.chat.id, open(pathurl, 'rb'),
                             caption=messagetosenduser,
                             reply_markup=self.buttonsmarkup.retunmarkup("Отправить данные на сервер"))
         self.bot.register_next_step_handler(message, self.sendalldatestoserver2)
 
     # Записываем данные в базу данных
     def sendalldatestoserver2(self,message):
-        # Формируем данные для INSERT в базу данных
-        insertdates = (self.first_name_date, self.middle_name_date, self.last_name_date, self.birth_date_date, self.raiting, self.telegramid,
-                 self.town_date, self.typesport_date, self.level_date, self.typesport_date, self.place_date, self.description_date)
-        # Добавление данных в базу данных
-        # Подключаемся к базе данных
-        connection = sqlite3.connect(self.pathdatabase)
-        cursor = connection.cursor()
-        # Запрос на добавление в таблицу
-        request = "INSERT INTO users (first_name, middle_name, last_name, birth_date, rating, id_telegram, id_town, id_kind, id_level, id_type, id_place, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
-        cursor.execute(request, insertdates)
-        connection.commit()
-        connection.close()
-
-        # Отправка сообщения, что данные успешно записаны
-        self.bot.reply_to(message, self.messagestouser.messageinsertdatesindatabase,
-                          reply_markup=self.buttonsmarkup.retunmarkup("Null"))
+        if message.text == "Отправить данные на сервер":
+            # Формируем данные для INSERT в базу данных
+            insertdates = (self.first_name_date, self.middle_name_date, self.last_name_date, self.birth_date_date, self.raiting, self.telegramid,
+                     self.town_date, self.typesport_date, self.level_date, self.typesport_date, self.place_date, self.description_date)
+            # Добавление данных в базу данных
+            # Подключаемся к базе данных
+            connection = sqlite3.connect(self.pathdatabase)
+            cursor = connection.cursor()
+            # Запрос на добавление в таблицу
+            request = "INSERT INTO users (first_name, middle_name, last_name, birth_date, rating, id_telegram, id_town, id_kind, id_level, id_type, id_place, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+            cursor.execute(request, insertdates)
+            connection.commit()
+            connection.close()
+            # Отправка сообщения, что данные успешно записаны
+            self.bot.reply_to(message, self.messagestouser.messageinsertdatesindatabase,
+                              reply_markup=self.buttonsmarkup.retunmarkup("Null"))
+        else:
+            # Отправка сообщения, что данные успешно записаны
+            self.bot.reply_to(message, self.messagestouser.wrongcommand,
+                              reply_markup=self.buttonsmarkup.retunmarkup())
