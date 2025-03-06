@@ -41,6 +41,7 @@ class profile:
 
     # Проверка на существование профиля в базе данных
     def existencecheck(self, message):
+        flag = False
         # Определяем telegramId
         self.telegramid = message.chat.id
         print(self.telegramid)
@@ -50,14 +51,11 @@ class profile:
         # Полученные из базы данные
         dates = base.selectfromdatabase(request)
         # Формируем список всех типов мест
-        print(dates)
-
-        # Если такой id есть в системе возвращаем True
-        if self.telegramid == 1871580124:
-            return True
-
-        else:
-            return False
+        ids = []
+        for elem in dates:
+            if elem[0] == self.telegramid:
+                flag = True
+        return flag
 
     # Вывод всех данных
     def printdates(self):
