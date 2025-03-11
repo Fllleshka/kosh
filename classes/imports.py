@@ -17,7 +17,5 @@ buttonsmarkup = buttons()
 messagestouser = messages()
 # Инициализация картинок
 imagestouser = images()
-# Инициалзиация класса отвечающего за профиль
-profileinf = profile(bot, messagestouser, buttonsmarkup, imagestouser)
 # Инициализация класса отвечающего за поиск
 searchprof = searchprofiles(bot)

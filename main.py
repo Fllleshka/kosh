@@ -36,6 +36,8 @@ def textmessage(message):
             bot.send_message(message.chat.id, messagestouser.interestinginfo,
                              reply_markup=buttonsmarkup.retunmarkup("Ссылка на канал"))
         case "Мой профиль 💪":
+            # Инициалзиация класса отвечающего за профиль
+            profileinf = profile(bot, messagestouser, buttonsmarkup, imagestouser)
             # Проверка на существование профиля в базе данных
             if (profileinf.existencecheck(message) == False):
                 profileinf.first_name(message)
@@ -47,9 +49,12 @@ def textmessage(message):
                      reply_markup=buttonsmarkup.retunmarkup("Профиль тренера"))
         case "Найти тренера":
             bot.register_next_step_handler(message, searchprof.printdates)
+
+        case "Моего варианта нету":
+            bot.send_message(message.chat.id, "Напиши мне и мы добавим!",
+                     reply_markup=buttonsmarkup.retunmarkup("Добавление данных"))
         case _:
             bot.reply_to(message, messagestouser.wrongcommand, reply_markup = buttonsmarkup.retunmarkup())
-
 
 # Запуск бесконечного опроса
 bot.infinity_polling()

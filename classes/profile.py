@@ -162,7 +162,7 @@ class profile:
                           reply_markup=self.buttonsmarkup.retunmarkup("Null"))
         self.bot.register_next_step_handler(message, self.town)
 
-    # Добавление данных по
+    # Добавление данных по городу
     def town(self, message):
         self.birth_date_date = message.text
         # Запрос к базе данных по имеющимся городам

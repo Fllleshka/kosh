@@ -10,6 +10,9 @@ pathtoimagesusers = "images/users/"
 # Путь к телеграмм каналу: Надо заменить ссылку!
 telegrampath = "https://t.me/Wylsared"
 
+# Путь к администратору канала:
+adminchannel = "https://telegram.org/@fleshkaomsk"
+
 # Класс картинок
 class images:
     def __init__(self):

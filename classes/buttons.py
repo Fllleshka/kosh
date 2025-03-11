@@ -18,11 +18,12 @@ class buttons:
         self.btn9 = telebot.types.KeyboardButton("Мой профиль 💪")
         self.btn10 = telebot.types.KeyboardButton("Найти спортсмена")
         self.btn10 = telebot.types.KeyboardButton("Поехали заполнять")
+        self.btn11 = telebot.types.KeyboardButton("Моего варианта нету")
 
         self.btntelegramchannel = telebot.types.InlineKeyboardButton("Kosh Sports", telegrampath)
         self.sendinformation = telebot.types.KeyboardButton("Отправить данные на сервер")
-        self.changeprofileinfo = self.btn10 = telebot.types.KeyboardButton("Отредактировать профиль")
-
+        self.changeprofileinfo = telebot.types.KeyboardButton("Отредактировать профиль")
+        self.sendmessageadmin = telebot.types.InlineKeyboardButton("Админ", adminchannel)
 
     def retunmarkup(self, role=None, dates=None):
         # Создание меню
@@ -68,6 +69,7 @@ class buttons:
                         button1 = telebot.types.KeyboardButton(dates[elem])
                         button2 = telebot.types.KeyboardButton(dates[elem + 1])
                         markup.add(button1, button2)
+                markup.add(self.btn11)
 
             case "Уровень" | "Места" | "Тип аккаунта":
                 for elem in dates:
@@ -78,6 +80,10 @@ class buttons:
 
             case "Отредактировать профиль":
                 markup.add(self.changeprofileinfo)
+
+            case "Добавление данных":
+                markup = telebot.types.InlineKeyboardMarkup()
+                markup.add(self.btntelegramchannel)
 
             case _:
                 markup.add(self.btn1)
