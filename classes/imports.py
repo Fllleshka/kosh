@@ -19,3 +19,5 @@ messagestouser = messages()
 imagestouser = images()
 # Инициализация класса отвечающего за поиск
 searchprof = searchprofiles(bot)
+# Инициализация telegramsids
+tids = telegramids()

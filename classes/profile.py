@@ -12,12 +12,13 @@ import json
 
 class profile:
     # Инициализация переменных
-    def __init__(self, bot, messagestouser, buttonsmarkup, imagestouser):
+    def __init__(self, bot, messagestouser, buttonsmarkup, imagestouser, tids):
         self.bot = bot
         self.pathdatabase = pathtodatabase
         self.messagestouser = messagestouser
         self.buttonsmarkup = buttonsmarkup
         self.imagestouser = imagestouser
+        self.tids = tids
         self.fulldates = []
 
         self.first_name_date = ""
@@ -182,7 +183,13 @@ class profile:
     # Выбор типа спорта
     def type_sport(self, message):
         self.town_date_name = message.text
-        self.town_date = self.seart_id_in_database(message.text, "town")
+        # Проверка на отсутствие города в списке
+        if message.text == "Моего варианта нету":
+            self.town_date = None
+            textmessageforadmin = "Клиент " + str(self.telegramid) + " не смог найти город. Надо связаться."
+            self.bot.send_message(self.tids.admin, textmessageforadmin)
+        else:
+            self.town_date = self.seart_id_in_database(message.text, "town")
         # Запрос к базе данных по имеющимся
         base = DataBase(pathtodatabase)
         req = "SELECT * FROM kind_sport ORDER BY name"

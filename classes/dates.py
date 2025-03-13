@@ -64,3 +64,11 @@ class messages:
         self.messageinsertdatesindatabase = "Поздравляю, ты теперь вместе с нами!"
         # Сообщение о том что такой профиль уже найден в базе данных
         self.messageprofilealreadyexists = "Друг, твой профиль уже есть в системе."
+
+
+# Класс данных по админам:
+class telegramids:
+    def __init__(self):
+        self.founder1 = None
+        self.founder2 = None
+        self.admin = 1917167694
