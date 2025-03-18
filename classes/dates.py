@@ -7,8 +7,8 @@ pathtodatabase = "database/maindatabase.db"
 # Путь к папке с фотографиями пользователей
 pathtoimagesusers = "images/users/"
 
-# Путь к телеграмм каналу: Надо заменить ссылку!
-telegrampath = "https://t.me/Wylsared"
+# Путь к телеграмм каналу
+telegrampath = "https://t.me/koshsports"
 
 # Путь к администратору канала:
 adminchannel = "https://telegram.org/@fleshkaomsk"
@@ -65,10 +65,11 @@ class messages:
         # Сообщение о том что такой профиль уже найден в базе данных
         self.messageprofilealreadyexists = "Друг, твой профиль уже есть в системе."
 
-
 # Класс данных по админам:
 class telegramids:
     def __init__(self):
         self.founder1 = None
         self.founder2 = None
         self.admin = 1917167694
+        # https://t.me/kosh_sports
+        self.founderworkaccaunt = None

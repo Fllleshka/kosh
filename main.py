@@ -50,9 +50,9 @@ def textmessage(message):
         case "Найти тренера":
             bot.register_next_step_handler(message, searchprof.printdates)
 
-        #case "Моего варианта нету":
-        #    bot.send_message(message.chat.id, "Напиши мне и мы добавим!",
-        #             reply_markup=buttonsmarkup.retunmarkup("Добавление данных"))
+        case "Отредактировать профиль":
+            # Инициалзиация класса отвечающего за профиль
+            changedatesfromprofile(message)
         case _:
             bot.reply_to(message, messagestouser.wrongcommand, reply_markup = buttonsmarkup.retunmarkup())
 

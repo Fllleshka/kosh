@@ -155,7 +155,7 @@ class profile:
                             reply_markup=self.buttonsmarkup.retunmarkup("Null"))
         self.bot.register_next_step_handler(message, self.birth_date)
 
-    # Добавление даты рождения для тренера
+    # Добавление даты рождения
     def birth_date(self, message):
         self.middle_name_date = message.text
         # Отправляем сообщение
@@ -183,13 +183,15 @@ class profile:
     # Выбор типа спорта
     def type_sport(self, message):
         self.town_date_name = message.text
+
         # Проверка на отсутствие города в списке
         if message.text == "Моего варианта нету":
             self.town_date = None
-            textmessageforadmin = "Клиент " + str(self.telegramid) + " не смог найти город. Надо связаться."
+            textmessageforadmin = "Клиент @" + str(message.from_user.username) + " не смог найти город. Надо связаться.\n"
             self.bot.send_message(self.tids.admin, textmessageforadmin)
         else:
             self.town_date = self.seart_id_in_database(message.text, "town")
+
         # Запрос к базе данных по имеющимся
         base = DataBase(pathtodatabase)
         req = "SELECT * FROM kind_sport ORDER BY name"
@@ -207,7 +209,15 @@ class profile:
     # Выбор уровня подготовки
     def level_training(self, message):
         self.typesport_date_name = message.text
-        self.typesport_date = self.seart_id_in_database(message.text, "type_sport")
+
+        # Проверка на отсутствие типа спорта в списке
+        if message.text == "Моего варианта нету":
+            self.typesport_date = None
+            textmessageforadmin = "Клиент @" + str(message.from_user.username) + " не смог найти подходящий спорт. Надо связаться.\n"
+            self.bot.send_message(self.tids.admin, textmessageforadmin)
+        else:
+            self.typesport_date = self.seart_id_in_database(message.text, "type_sport")
+
         # Запрос к базе данных по имеющимся городам
         base = DataBase(pathtodatabase)
         req = "SELECT * FROM level_training ORDER BY name"
@@ -329,8 +339,99 @@ class profile:
             connection.close()
             # Отправка сообщения, что данные успешно записаны
             self.bot.reply_to(message, self.messagestouser.messageinsertdatesindatabase,
-                              reply_markup=self.buttonsmarkup.retunmarkup("Null"))
+                              reply_markup=self.buttonsmarkup.retunmarkup())
         else:
             # Отправка сообщения, что данные успешно записаны
             self.bot.reply_to(message, self.messagestouser.wrongcommand,
                               reply_markup=self.buttonsmarkup.retunmarkup())
+
+# Функция запроса к базе данных
+def requestfordatabase(request, telegramid):
+    # Запрос к базе данных
+    base = DataBase(pathtodatabase)
+    # Полученные из базы данные
+    try:
+        dates = base.selectfromdatabase(request)[0]
+        return dates
+    except:
+        return None
+
+
+# Вывод данный по существующему профилю
+def changedatesfromprofile(message):
+    telegramid = message.chat.id
+    # Полученные из базы данные
+    req = "SELECT * FROM users WHERE id_telegram=" + str(telegramid)
+    dates = requestfordatabase(req, telegramid)
+    for element in dates:
+        print(element)
+
+    # ФИО
+    fio = dates[3] + " " + dates[1] + " " + dates[2]
+    messagetosenduser = "1. Фамилия Имя Отчество:\n          " + str(fio) + "\n"
+
+    # Возраст
+    splitbirthdate = dates[4].split(".")
+    intbirthdate = []
+    # Преобразуем в чело численный тип и выставляем правильный порядок
+    for elem in reversed(splitbirthdate):
+        intbirthdate.append(int(elem))
+    today = datetime.now().date()
+    birthdatedate = date(intbirthdate[0], intbirthdate[1], intbirthdate[2])
+    age = today.year - birthdatedate.year - ((today.month, today.day) < (birthdatedate.month, birthdatedate.day))
+    messagetosenduser += "2. Возраст:\n          " + str(age) + "\n"
+
+    # Рейтинг
+    raiting = dates[5]
+    messagetosenduser += "3. Рейтинг в системе:\n          " + str(raiting) + "\n"
+
+    # Город
+    req = "SELECT name FROM town, users where users.id_town = town.id_town AND users.id_telegram=" + str(telegramid)
+    town = requestfordatabase(req, telegramid)
+    if town == None:
+        messagetosenduser += "4. Город:\n          Не выбран \n"
+    else:
+        messagetosenduser += "4. Город:\n          " + str(town[0]) + "\n"
+
+    # Вид спорта
+    req = "SELECT name FROM kind_sport, users where users.id_kind=kind_sport.id_kind AND users.id_telegram=" + str(telegramid)
+    kind_sport = requestfordatabase(req, telegramid)
+    if kind_sport == None:
+        messagetosenduser += "5. Вид спорта:\n          Не выбран \n"
+    else:
+        messagetosenduser += "5. Вид спорта:\n          " + str(kind_sport[0]) + "\n"
+
+    # Уроверь подготовки
+    req = "SELECT name FROM level_training, users where users.id_level=level_training.id_level AND users.id_telegram=" + str(telegramid)
+    level_training = requestfordatabase(req, telegramid)
+    if level_training == None:
+        messagetosenduser += "6. Уровень подготовки:\n          Не выбран \n"
+    else:
+        messagetosenduser += "6. Уровень подготовки:\n          " + str(level_training[0]) + "\n"
+
+    # Место проведения
+    req = "SELECT name FROM place, users where users.id_place=place.id_place AND users.id_telegram=" + str(telegramid)
+    training_place = requestfordatabase(req, telegramid)
+    if training_place == None:
+        messagetosenduser += "7. Место проведения:\n          Не выбран \n"
+    else:
+        messagetosenduser += "7. Место проведения:\n          " + str(training_place[0]) + "\n"
+
+    # Тип аккаунта
+    req = "SELECT name FROM accaunt_type, users where users.id_place=accaunt_type.id_type AND users.id_telegram=" + str(telegramid)
+    accaunt_type = requestfordatabase(req, telegramid)
+    if accaunt_type == None:
+        messagetosenduser += "8. Тип аккаунта:\n          Не выбран \n"
+    else:
+        messagetosenduser += "8. Тип аккаунта:\n          " + str(accaunt_type[0]) + "\n"
+
+    description = dates[12]
+
+    messagetosenduser += "8. Описание:\n          " + str(description)
+
+    !!! НЕОБХОДИМО ДОПИСАТЬ отправку фотографии
+
+    # Формирование пути к фактографии
+    pathurl = self.imagestouser.startpathprofile + str(self.telegramid) + self.imagestouser.endpathprofile
+
+    print(messagetosenduser)

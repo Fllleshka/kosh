@@ -38,7 +38,7 @@ class buttons:
                 markup.add(self.btn8)
 
             case "Спортсмен":
-                markup.add(self.btn4)
+                markup.add(self.btn9)
                 markup.add(self.btn5)
                 markup.add(self.btn6)
                 markup.add(self.btn7)

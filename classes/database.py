@@ -75,7 +75,7 @@ class DataBase:
                     INSERT INTO level_training(
                         name)
                         VALUES
-                        ('Начинающий'), ('Любитель'), ('Профессионал')
+                        ('Любитель'), ('Начинающий'), ('Профессионал')
                         ''')
         connection.commit()
 
