@@ -17,7 +17,5 @@ buttonsmarkup = buttons()
 messagestouser = messages()
 # Инициализация картинок
 imagestouser = images()
-# Инициализация класса отвечающего за поиск
-searchprof = searchprofiles(bot)
 # Инициализация telegramsids
 tids = telegramids()

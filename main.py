@@ -36,7 +36,7 @@ def textmessage(message):
             bot.send_message(message.chat.id, messagestouser.interestinginfo,
                              reply_markup=buttonsmarkup.retunmarkup("Ссылка на канал"))
         case "Мой профиль 💪":
-            # Инициалзиация класса отвечающего за профиль
+            # Инициализация класса отвечающего за профиль
             profileinf = profile(bot, messagestouser, buttonsmarkup, imagestouser, tids)
             # Проверка на существование профиля в базе данных
             if (profileinf.existencecheck(message) == False):
@@ -48,7 +48,9 @@ def textmessage(message):
             bot.send_message(message.chat.id, messagestouser.messagecoachstart,
                      reply_markup=buttonsmarkup.retunmarkup("Профиль тренера"))
         case "Найти тренера":
-            bot.register_next_step_handler(message, searchprof.printdates)
+            # Инициализация класса отвечающего за поиск
+            searchprof = searchprofiles(bot, message)
+            searchprof.printdates()
 
         case "Отредактировать профиль":
             # Инициалзиация класса отвечающего за профиль

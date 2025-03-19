@@ -429,9 +429,9 @@ def changedatesfromprofile(message):
 
     messagetosenduser += "8. Описание:\n          " + str(description)
 
-    !!! НЕОБХОДИМО ДОПИСАТЬ отправку фотографии
+    #!!! НЕОБХОДИМО ДОПИСАТЬ отправку фотографии
 
     # Формирование пути к фактографии
-    pathurl = self.imagestouser.startpathprofile + str(self.telegramid) + self.imagestouser.endpathprofile
+    #pathurl = self.imagestouser.startpathprofile + str(self.telegramid) + self.imagestouser.endpathprofile
 
     print(messagetosenduser)
