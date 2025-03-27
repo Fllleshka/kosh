@@ -27,10 +27,17 @@ def startmessage(message):
 def textmessage(message):
     match (message.text):
         case "💪Я тренер💪":
-            bot.send_message(message.chat.id, "Отлично работаем дальше",
-                             reply_markup = buttonsmarkup.retunmarkup("Тренер"))
+            bot.send_message(message.chat.id, "Проверяем наличие профиля в базе...")
+            # Инициализация класса отвечающего за профиль
+            profileinf = profile(bot, messagestouser, buttonsmarkup, imagestouser, tids)
+            # Проверка на существование профиля в базе данных
+            if (profileinf.existencecheck(message) == False):
+                profileinf.first_name(message)
+            else:
+                bot.send_message(message.chat.id, messagestouser.messageprofilealreadyexists,
+                                 reply_markup=buttonsmarkup.retunmarkup("Тренер"))
         case "🏅Я спортсмен🏅":
-            bot.send_message(message.chat.id, "Отлично работаем дальше",
+            bot.send_message(message.chat.id, "Проверяем наличие профиля в базе...",
                              reply_markup=buttonsmarkup.retunmarkup("Спортсмен"))
         case "🧐Я просто интересуюсь🧐" | "Получить полезную информацию о спорте":
             bot.send_message(message.chat.id, messagestouser.interestinginfo,
@@ -43,18 +50,15 @@ def textmessage(message):
                 profileinf.first_name(message)
             else:
                 bot.send_message(message.chat.id, messagestouser.messageprofilealreadyexists,
-                                 reply_markup=buttonsmarkup.retunmarkup("Отредактировать профиль"))
-        case "Поехали заполнять":
-            bot.send_message(message.chat.id, messagestouser.messagecoachstart,
-                     reply_markup=buttonsmarkup.retunmarkup("Профиль тренера"))
+                                 reply_markup=buttonsmarkup.retunmarkup("Мой профиль"))
         case "Найти тренера":
             # Инициализация класса отвечающего за поиск
             searchprof = searchprofiles(bot, message)
             searchprof.printdates()
 
-        case "Отредактировать профиль":
-            # Инициалзиация класса отвечающего за профиль
-            changedatesfromprofile(message)
+        case "Мой профиль для других":
+            # Инициализация класса отвечающего за профиль
+            selectdatesfromprofile(message, imagestouser, bot)
         case _:
             bot.reply_to(message, messagestouser.wrongcommand, reply_markup = buttonsmarkup.retunmarkup())
 

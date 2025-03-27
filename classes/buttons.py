@@ -10,15 +10,15 @@ class buttons:
         self.btn1 = telebot.types.KeyboardButton("💪Я тренер💪")
         self.btn2 = telebot.types.KeyboardButton("🏅Я спортсмен🏅")
         self.btn3 = telebot.types.KeyboardButton("🧐Я просто интересуюсь🧐")
-        self.btn4 = telebot.types.KeyboardButton("Разместить свой профиль спортсмена")
-        self.btn5 = telebot.types.KeyboardButton("Найти тренера")
+        self.btn4 = telebot.types.KeyboardButton("Найти тренера")
         self.btn6 = telebot.types.KeyboardButton("Найти партнёра для занятий спортом")
         self.btn7 = telebot.types.KeyboardButton("Принять участие в соревнованиях")
         self.btn8 = telebot.types.KeyboardButton("Получить полезную информацию о спорте")
         self.btn9 = telebot.types.KeyboardButton("Мой профиль 💪")
         self.btn10 = telebot.types.KeyboardButton("Найти спортсмена")
-        self.btn10 = telebot.types.KeyboardButton("Поехали заполнять")
         self.btn11 = telebot.types.KeyboardButton("Моего варианта нету")
+        self.btn12 = telebot.types.KeyboardButton("Мой профиль для других")
+
 
         self.btntelegramchannel = telebot.types.InlineKeyboardButton("Kosh Sports", telegrampath)
         self.sendinformation = telebot.types.KeyboardButton("Отправить данные на сервер")
@@ -32,17 +32,14 @@ class buttons:
 
             case "Тренер":
                 markup.add(self.btn9)
-                markup.add(self.btn5)
                 markup.add(self.btn10)
                 markup.add(self.btn7)
-                markup.add(self.btn8)
 
             case "Спортсмен":
                 markup.add(self.btn9)
-                markup.add(self.btn5)
+                markup.add(self.btn4)
                 markup.add(self.btn6)
                 markup.add(self.btn7)
-                markup.add(self.btn8)
 
             case "Ссылка на канал":
                 markup = telebot.types.InlineKeyboardMarkup()
@@ -78,7 +75,8 @@ class buttons:
             case "Отправить данные на сервер":
                 markup.add(self.sendinformation)
 
-            case "Отредактировать профиль":
+            case "Мой профиль":
+                markup.add(self.btn12)
                 markup.add(self.changeprofileinfo)
 
             case "Добавление данных":

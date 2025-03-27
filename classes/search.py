@@ -21,15 +21,17 @@ class searchprofiles:
     # Печать данных
     def printdates(self):
 
-        url = "tg://user?id=1871580124"
-        messagetext="Владислав"
-
-        btn = telebot.types.InlineKeyboardButton(messagetext, url)
 
         # Создание меню
         markup = telebot.types.InlineKeyboardMarkup()
-        markup.add(btn)
 
-        self.importdatesfromdatabase()
+
+        leftbutton = telebot.types.InlineKeyboardButton("<", callback_data='left')
+        rightbutton = telebot.types.InlineKeyboardButton(">", callback_data='right')
+        centerbutton = telebot.types.InlineKeyboardButton("0/0", callback_data='None')
+        markup.add(leftbutton, centerbutton, rightbutton)
+
+
+        #self.importdatesfromdatabase()
 
         self.bot.send_message(self.message.chat.id, "111", reply_markup=markup)

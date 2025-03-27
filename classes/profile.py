@@ -356,15 +356,12 @@ def requestfordatabase(request, telegramid):
     except:
         return None
 
-
 # Вывод данный по существующему профилю
-def changedatesfromprofile(message):
+def selectdatesfromprofile(message, imagestouser, bot):
     telegramid = message.chat.id
     # Полученные из базы данные
     req = "SELECT * FROM users WHERE id_telegram=" + str(telegramid)
     dates = requestfordatabase(req, telegramid)
-    for element in dates:
-        print(element)
 
     # ФИО
     fio = dates[3] + " " + dates[1] + " " + dates[2]
@@ -429,9 +426,9 @@ def changedatesfromprofile(message):
 
     messagetosenduser += "8. Описание:\n          " + str(description)
 
-    #!!! НЕОБХОДИМО ДОПИСАТЬ отправку фотографии
-
     # Формирование пути к фактографии
-    #pathurl = self.imagestouser.startpathprofile + str(self.telegramid) + self.imagestouser.endpathprofile
+    pathtoimage = imagestouser.startpathprofile + str(telegramid) + "/profile.png"
 
-    print(messagetosenduser)
+    # Отправка профиля
+    bot.send_photo(message.chat.id, photo=open(pathtoimage, 'rb'),
+                   caption=messagetosenduser)

@@ -17,3 +17,6 @@ https://drive.google.com/file/d/16v8sn77W915dq0EsJYHmxPiN3svlTEBC/view
 https://app.botman.pro/app/template/view/badit7hlbiowbcek
 2. Drawio
 https://drive.google.com/file/d/1TdxiY40iSqDMBjgmJO_3AoqzclGJV0sc/view?usp=sharing
+
+Диаграмма состояний
+https://drive.google.com/file/d/1lUvqlL0c2V35_qRNaYC0P_gsZ_1HVdsS/view?usp=sharing
