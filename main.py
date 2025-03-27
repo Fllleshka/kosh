@@ -54,7 +54,12 @@ def textmessage(message):
         case "Найти тренера":
             # Инициализация класса отвечающего за поиск
             searchprof = searchprofiles(bot, message)
-            searchprof.printdates()
+            searchprof.printdates("Тренер")
+
+        case "Найти спортсмена":
+            # Инициализация класса отвечающего за поиск
+            searchprof = searchprofiles(bot, message)
+            searchprof.printdates("Спортсмен")
 
         case "Мой профиль для других":
             # Инициализация класса отвечающего за профиль
