@@ -27,7 +27,6 @@ def startmessage(message):
 def textmessage(message):
     match (message.text):
         case "💪Я тренер💪":
-            bot.send_message(message.chat.id, "Проверяем наличие профиля в базе...")
             # Инициализация класса отвечающего за профиль
             profileinf = profile(bot, messagestouser, buttonsmarkup, imagestouser, tids)
             # Проверка на существование профиля в базе данных
@@ -46,7 +45,7 @@ def textmessage(message):
             # Инициализация класса отвечающего за профиль
             profileinf = profile(bot, messagestouser, buttonsmarkup, imagestouser, tids)
             # Проверка на существование профиля в базе данных
-            if (profileinf.existencecheck(message) == False):
+            if (profileinf.existencecheckexistencecheck(message) == False):
                 profileinf.first_name(message)
             else:
                 bot.send_message(message.chat.id, messagestouser.messageprofilealreadyexists,

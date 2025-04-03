@@ -42,6 +42,17 @@ class searchprofiles:
         markup.add(leftbutton, centerbutton, rightbutton)
         return markup
 
+    # Формирование профиля
+    def createprofiledates(self, dates, index, images):
+        returntext = []
+        imageuser = images.startpathprofile + str(dates[index][0]) + "/profile.png"
+        returntext.append(imageuser)
+        url = "tg://user?id=" + str(dates[index][0])
+        returntext.append(url)
+        name = str(dates[index][1]) + " " + str(dates[index][1])
+        returntext.append(name)
+        return returntext
+
     # Печать данных
     def printdates(self, argument, bot, images):
 
@@ -53,9 +64,12 @@ class searchprofiles:
         # Проверка данные на наличие, если нет, то выводим сообщение
         if len(datesfromdatabase) != 0:
 
-            # Определяем количество менюшек в нашем списке
+            # Определяем количество строк нужных нам в нашем списке
             countmenues = len(datesfromdatabase)
-            print("Количество менюшек по 5 позиций:", countmenues)
+
+            for element in datesfromdatabase:
+                print(element)
+            '''
 
             markup = self.selectdatesformenu(0, 5, datesfromdatabase, images, markup)
             print("========================")
@@ -63,15 +77,15 @@ class searchprofiles:
                 print(elem * 5, "\t", (elem+1)*5)
             print("========================")
 
-            '''for element in datesfromdatabase:
+            for element in datesfromdatabase:
                 indexelem = datesfromdatabase.index(element)
                 imageuser = images.startpathprofile + str(datesfromdatabase[indexelem][0]) + "/profile.png"
                 url = "tg://user?id=" + str(datesfromdatabase[indexelem][0])
                 name = str(datesfromdatabase[indexelem][1]) + " " + str(datesfromdatabase[indexelem][1])
                 user = telebot.types.InlineKeyboardButton(name, url = url)
                 print(element, "\t", imageuser)
-                markup.add(user)'''
-
+                markup.add(user)
+            '''
             # Кнопки навигации
             self.bottombuttons(markup, countmenues)
 
@@ -79,7 +93,18 @@ class searchprofiles:
             centerbutton = telebot.types.InlineKeyboardButton("Тестовая кнопка", callback_data='print.None')
             markup2.add(centerbutton)
 
-            self.bot.send_message(self.message.chat.id, "Список тренеров", reply_markup=markup)
+            datesforsendphoto = self.createprofiledates(datesfromdatabase, 0, images)
+            markupsendphoto = telebot.types.InlineKeyboardMarkup()
+            tgforsendphoto = telebot.types.InlineKeyboardButton("Связаться", url=datesforsendphoto[1])
+            markupsendphoto.add(tgforsendphoto)
+
+            self.bot.send_photo(self.message.chat.id,
+                                photo=open(datesforsendphoto[0], 'rb'),
+                                caption=datesforsendphoto[2],
+                                reply_markup = markupsendphoto)
+
+            #self.bot.send_message(, , reply_markup=markup)
+
         else:
             self.bot.send_message(self.message.chat.id, "К сожалению нету анкет подходящих вам.\nПопробуйте позже...")
 
@@ -87,6 +112,9 @@ class searchprofiles:
         def callbackdata(call):
             match (call.data):
                 case "print.left":
+                    newtext = "test new text"
+                    newmarkup = markup2
+
                     bot.edit_message_reply_markup(chat_id=call.message.chat.id,
                                                         message_id=call.message.message_id,
                                                         reply_markup=markup2)
