@@ -34,10 +34,12 @@ class searchprofiles:
         return markup
 
     # Создание кнопок внизу списка
-    def bottombuttons(self, markup, countmenues):
-        leftbutton = telebot.types.InlineKeyboardButton("<", callback_data='print.left')
-        rightbutton = telebot.types.InlineKeyboardButton(">", callback_data='print.right')
-        textcenterbutton = "1/" + str(countmenues)
+    def bottombuttons(self, markup, index, countmenues):
+        leftcallbackdata = 'print.left|' + str(index)
+        leftbutton = telebot.types.InlineKeyboardButton("<", callback_data=leftcallbackdata)
+        rightcallbackdata = 'print.right|' + str(index)
+        rightbutton = telebot.types.InlineKeyboardButton(">", callback_data=rightcallbackdata)
+        textcenterbutton = str(index) + " / " + str(countmenues)
         centerbutton = telebot.types.InlineKeyboardButton(textcenterbutton, callback_data='print.None')
         markup.add(leftbutton, centerbutton, rightbutton)
         return markup
@@ -49,7 +51,7 @@ class searchprofiles:
         returntext.append(imageuser)
         url = "tg://user?id=" + str(dates[index][0])
         returntext.append(url)
-        name = str(dates[index][1]) + " " + str(dates[index][1])
+        name = str(dates[index][1]) + " " + str(dates[index][2]) + "\n" + "R: " + str(dates[index][3])
         returntext.append(name)
         return returntext
 
@@ -67,28 +69,6 @@ class searchprofiles:
             # Определяем количество строк нужных нам в нашем списке
             countmenues = len(datesfromdatabase)
 
-            for element in datesfromdatabase:
-                print(element)
-            '''
-
-            markup = self.selectdatesformenu(0, 5, datesfromdatabase, images, markup)
-            print("========================")
-            for elem in range(0, countmenues):
-                print(elem * 5, "\t", (elem+1)*5)
-            print("========================")
-
-            for element in datesfromdatabase:
-                indexelem = datesfromdatabase.index(element)
-                imageuser = images.startpathprofile + str(datesfromdatabase[indexelem][0]) + "/profile.png"
-                url = "tg://user?id=" + str(datesfromdatabase[indexelem][0])
-                name = str(datesfromdatabase[indexelem][1]) + " " + str(datesfromdatabase[indexelem][1])
-                user = telebot.types.InlineKeyboardButton(name, url = url)
-                print(element, "\t", imageuser)
-                markup.add(user)
-            '''
-            # Кнопки навигации
-            self.bottombuttons(markup, countmenues)
-
             markup2 = telebot.types.InlineKeyboardMarkup()
             centerbutton = telebot.types.InlineKeyboardButton("Тестовая кнопка", callback_data='print.None')
             markup2.add(centerbutton)
@@ -96,29 +76,33 @@ class searchprofiles:
             datesforsendphoto = self.createprofiledates(datesfromdatabase, 0, images)
             markupsendphoto = telebot.types.InlineKeyboardMarkup()
             tgforsendphoto = telebot.types.InlineKeyboardButton("Связаться", url=datesforsendphoto[1])
+
             markupsendphoto.add(tgforsendphoto)
+            # Кнопки навигации
+            markupsendphoto = self.bottombuttons(markupsendphoto, 1, countmenues)
 
             self.bot.send_photo(self.message.chat.id,
                                 photo=open(datesforsendphoto[0], 'rb'),
                                 caption=datesforsendphoto[2],
                                 reply_markup = markupsendphoto)
 
-            #self.bot.send_message(, , reply_markup=markup)
-
         else:
             self.bot.send_message(self.message.chat.id, "К сожалению нету анкет подходящих вам.\nПопробуйте позже...")
 
         @bot.callback_query_handler(func=lambda call: True)
         def callbackdata(call):
-            match (call.data):
+            commands = call.data.split("|")
+            print(commands)
+            match (commands[0]):
                 case "print.left":
                     newtext = "test new text"
-                    newmarkup = markup2
 
+                    newmarkup = self.bottombuttons(markupsendphoto, commands[1], countmenues)
                     bot.edit_message_reply_markup(chat_id=call.message.chat.id,
                                                         message_id=call.message.message_id,
-                                                        reply_markup=markup2)
+                                                        reply_markup=newmarkup)
                 case "print.right":
+                    newmarkup = self.bottombuttons(markupsendphoto, commands[1], countmenues)
                     bot.edit_message_reply_markup(chat_id=call.message.chat.id,
                                                         message_id=call.message.message_id,
-                                                        reply_markup=markup2)
+                                                        reply_markup=newmarkup)

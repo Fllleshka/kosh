@@ -181,6 +181,7 @@ class DataBase:
         connection.commit()
 
         # Заполнение таблицы users
+        # Фетисов Денис Елисеевич
         cursor.execute('''
                             INSERT INTO users(
                                 first_name, middle_name, last_name,
@@ -188,13 +189,14 @@ class DataBase:
                                 id_town, id_kind, id_level,
                                 id_type, id_place, description)
                                 VALUES
-                                ('Денис'), ('Елисеевич'), ('Фетисов'),
+                                (('Денис'), ('Елисеевич'), ('Фетисов'),
                                 ('17.01.1998'), ('43'), ('None'),
                                 ('3'), ('1'), ('1'),
                                 ('2'), ('2'),
-                                ('Всем привет! Хочу бегать короткие дистанции до 1 км. Пишите станцию метро в сообщении, чтобы сразу найтись)'),
+                                ('Всем привет! Хочу бегать короткие дистанции до 1 км. Пишите станцию метро в сообщении, чтобы сразу найтись)'))
                                 ''')
         connection.commit()
+        # Иванова Виктория Михайловна
         cursor.execute('''
                             INSERT INTO users(
                                 first_name, middle_name, last_name,
@@ -202,13 +204,14 @@ class DataBase:
                                 id_town, id_kind, id_level,
                                 id_type, id_place, description)
                                 VALUES
-                                ('Виктория'), ('Михайловна'), ('Иванова'),
+                                (('Виктория'), ('Михайловна'), ('Иванова'),
                                 ('03.11.2001'), ('13'), ('None'),
                                 ('3'), ('1'), ('1'),
                                 ('2'), ('2'),
-                                ('Занимаюсь спортом в удовольствие) Бегаю не на результат) Пишите :D'),
+                                ('Занимаюсь спортом в удовольствие) Бегаю не на результат) Пишите :D'))
                                 ''')
         connection.commit()
+        # Новиков Владимир Ильич
         cursor.execute('''
                             INSERT INTO users(
                                 first_name, middle_name, last_name,
@@ -216,13 +219,14 @@ class DataBase:
                                 id_town, id_kind, id_level,
                                 id_type, id_place, description)
                                 VALUES
-                                ('Владимир'), ('Ильич'), ('Новиков'),
+                                (('Владимир'), ('Ильич'), ('Новиков'),
                                 ('17.04.2005'), ('117'), ('None'),
                                 ('3'), ('1'), ('3'),
                                 ('2'), ('2'),
-                                ('Моя цель выбежать из 14 минут на дистанции 5 километров. Присоединяйтесь, кто сможет удержать темп!'),
+                                ('Моя цель выбежать из 14 минут на дистанции 5 километров. Присоединяйтесь, кто сможет удержать темп!'))
                                 ''')
         connection.commit()
+        # Березина Анна Ярославовна
         cursor.execute('''
                             INSERT INTO users(
                                 first_name, middle_name, last_name,
@@ -230,11 +234,101 @@ class DataBase:
                                 id_town, id_kind, id_level,
                                 id_type, id_place, description)
                                 VALUES
-                                ('Анна'), ('Ярославовна'), ('Березина'),
+                                (('Анна'), ('Ярославовна'), ('Березина'),
                                 ('03.12.2001'), ('117'), ('None'),
                                 ('3'), ('1'), ('1'),
                                 ('2'), ('2'),
-                                ('Новые знакомства в беге, это прекрасно! Надеюсь найти новых друзей...'),
+                                ('Новые знакомства в беге, это прекрасно! Надеюсь найти новых друзей...'))
+                                ''')
+        connection.commit()
+        # Голубев Алексей Филиппович
+        cursor.execute('''
+                            INSERT INTO users(
+                                first_name, middle_name, last_name,
+                                birth_date, rating, id_telegram,
+                                id_town, id_kind, id_level,
+                                id_type, id_place, description)
+                                VALUES
+                                (('Алексей'), ('Филиппович'), ('Голубев'),
+                                ('19.02.1990'), ('401'), ('None'),
+                                ('5'), ('17'), ('3'),
+                                ('1'), ('3'),
+                                ('Мастер спорта по шахматам к вашим услугам. Обучаю как профессионалов, так и начинающих.'))
+                                ''')
+        connection.commit()
+        # Павлова Екатерина Тимофеевна
+        cursor.execute('''
+                            INSERT INTO users(
+                                first_name, middle_name, last_name,
+                                birth_date, rating, id_telegram,
+                                id_town, id_kind, id_level,
+                                id_type, id_place, description)
+                                VALUES
+                                (('Екатерина'), ('Тимофеевна'), ('Павлова'),
+                                ('10.05.1996'), ('23'), ('None'),
+                                ('6'), ('8'), ('1'),
+                                ('2'), ('2'),
+                                ('Познакомлюсь с прекрасным парнем для раскатывания паудера и фрирайда. '))
+                                ''')
+        connection.commit()
+        # Краснов Денис Никитич
+        cursor.execute('''
+                            INSERT INTO users(
+                                first_name, middle_name, last_name,
+                                birth_date, rating, id_telegram,
+                                id_town, id_kind, id_level,
+                                id_type, id_place, description)
+                                VALUES
+                                (('Денис'), ('Никитич'), ('Краснов'),
+                                ('18.12.2006'), ('7'), ('None'),
+                                ('3'), ('14'), ('1'),
+                                ('2'), ('1'),
+                                ('Хочу стать мастером спорта по плаванию. В поисках наставника для совершенствования'))
+                                ''')
+        connection.commit()
+        # Ершова Варвара Тимуровна
+        cursor.execute('''
+                            INSERT INTO users(
+                                first_name, middle_name, last_name,
+                                birth_date, rating, id_telegram,
+                                id_town, id_kind, id_level,
+                                id_type, id_place, description)
+                                VALUES
+                                (('Варвара'), ('Тимуровна'), ('Ершова'),
+                                ('01.01.2001'), ('19'), ('None'),
+                                ('3'), ('1'), ('1'),
+                                ('2'), ('2'),
+                                ('Пишите'))
+                                ''')
+        connection.commit()
+        # Андреев Даниил Тимофеевич
+        cursor.execute('''
+                            INSERT INTO users(
+                                first_name, middle_name, last_name,
+                                birth_date, rating, id_telegram,
+                                id_town, id_kind, id_level,
+                                id_type, id_place, description)
+                                VALUES
+                                (('Даниил'), ('Тимофеевич'), ('Андреев'),
+                                ('27.11.2000'), ('0'), ('None'),
+                                ('3'), ('1'), ('1'),
+                                ('2'), ('2'),
+                                ('Добрый день. Бегаю каждое утро в 06:00. Нужна компания для ранних пробежек'))
+                                ''')
+        connection.commit()
+        # Зуева Малика Дмитриевна
+        cursor.execute('''
+                            INSERT INTO users(
+                                first_name, middle_name, last_name,
+                                birth_date, rating, id_telegram,
+                                id_town, id_kind, id_level,
+                                id_type, id_place, description)
+                                VALUES
+                                (('Малика'), ('Дмитриевна'), ('Зуева'),
+                                ('01.12.2004'), ('21'), ('None'),
+                                ('3'), ('1'), ('1'),
+                                ('2'), ('2'),
+                                ('Вечерние пробежки по набережной. Присоединяйтесь)'))
                                 ''')
         connection.commit()
 

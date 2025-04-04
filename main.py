@@ -45,7 +45,7 @@ def textmessage(message):
             # Инициализация класса отвечающего за профиль
             profileinf = profile(bot, messagestouser, buttonsmarkup, imagestouser, tids)
             # Проверка на существование профиля в базе данных
-            if (profileinf.existencecheckexistencecheck(message) == False):
+            if (profileinf.existencecheck(message) == False):
                 profileinf.first_name(message)
             else:
                 bot.send_message(message.chat.id, messagestouser.messageprofilealreadyexists,
