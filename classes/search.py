@@ -34,19 +34,26 @@ class searchprofiles:
         return markup
 
     # Создание кнопок внизу списка
-    def bottombuttons(self, markup, index, countmenues, maxcount):
+    def bottombuttons(self, markup, index, countmenues, url):
+
+        # Кнопка связаться
+        tgforsendphoto = telebot.types.InlineKeyboardButton("Связаться", url=url)
+        markup.add(tgforsendphoto)
+        # Левая стрелка
         leftcallbackdata = 'print.left|' + str(index)
         leftbutton = telebot.types.InlineKeyboardButton("<", callback_data=leftcallbackdata)
+        # Правая стрелка
         rightcallbackdata = 'print.right|' + str(index)
         rightbutton = telebot.types.InlineKeyboardButton(">", callback_data=rightcallbackdata)
+        # Центральный сектор с сётчиком
         textcenterbutton = str(index) + " / " + str(countmenues)
         if index < 0:
             textcenterbutton = "0 / " + str(countmenues)
         if index > countmenues:
             textcenterbutton = str(index) + " / " + str(countmenues)
-
         centerbutton = telebot.types.InlineKeyboardButton(textcenterbutton, callback_data='print.None')
         markup.add(leftbutton, centerbutton, rightbutton)
+
         return markup
 
     # Формирование профиля
@@ -65,26 +72,22 @@ class searchprofiles:
 
         # Получаем все записи по нашему запросу
         datesfromdatabase = self.importdatesfromdatabase(argument)
-        # Создание меню
-        markup = telebot.types.InlineKeyboardMarkup()
 
+        print(f"======{argument}======")
+        for element in datesfromdatabase:
+            print(element)
+        print(f"======{argument}======")
         # Проверка данные на наличие, если нет, то выводим сообщение
         if len(datesfromdatabase) != 0:
 
             # Определяем количество строк нужных нам в нашем списке
             countmenues = len(datesfromdatabase)
 
-            markup2 = telebot.types.InlineKeyboardMarkup()
-            centerbutton = telebot.types.InlineKeyboardButton("Тестовая кнопка", callback_data='print.None')
-            markup2.add(centerbutton)
-
             datesforsendphoto = self.createprofiledates(datesfromdatabase, 0, images)
             markupsendphoto = telebot.types.InlineKeyboardMarkup()
-            tgforsendphoto = telebot.types.InlineKeyboardButton("Связаться", url=datesforsendphoto[1])
-            markupsendphoto.add(tgforsendphoto)
 
             # Кнопки навигации
-            markupsendphoto = self.bottombuttons(markupsendphoto, 1, countmenues, len(datesfromdatabase))
+            markupsendphoto = self.bottombuttons(markupsendphoto, 0, countmenues, datesforsendphoto[1])
 
             self.bot.send_photo(self.message.chat.id,
                                 photo=open(datesforsendphoto[0], 'rb'),
@@ -96,27 +99,58 @@ class searchprofiles:
 
         @bot.callback_query_handler(func=lambda call: True)
         def callbackdata(call):
-            markupsendphoto = telebot.types.ReplyKeyboardRemove()
             markupsendphoto = telebot.types.InlineKeyboardMarkup()
             commands = call.data.split("|")
-            print(commands)
+
             match (commands[0]):
                 case "print.left":
+
+                    # Получаем все записи по нашему запросу
+                    datesfromdatabase = self.importdatesfromdatabase(argument)
+
                     if int(commands[1]) <= 0:
                         indexforbottombuttons = 0
                     else:
                         indexforbottombuttons = int(commands[1]) - 1
-                    newtext = "test new text"
-                    newmarkup = self.bottombuttons(markupsendphoto, indexforbottombuttons, countmenues, len(datesfromdatabase))
-                    bot.edit_message_reply_markup(chat_id=call.message.chat.id,
-                                                        message_id=call.message.message_id,
-                                                        reply_markup=newmarkup)
+                    # Подготоваливаем данные для изменения
+                    newdatesforperson = self.createprofiledates(datesfromdatabase, indexforbottombuttons, images)
+                    print(newdatesforperson)
+                    newtext = newdatesforperson[2]
+                    newphoto = open(newdatesforperson[0], 'rb')
+                    newurl = newdatesforperson[1]
+                    newmarkup = self.bottombuttons(markupsendphoto, indexforbottombuttons, countmenues, newurl)
+
+                    # Изменение данных сообщения
+                    bot.edit_message_media(chat_id=call.message.chat.id,
+                                                message_id=call.message.message_id,
+                                                media=telebot.types.InputMedia(
+                                                    type='photo',
+                                                    media=newphoto,
+                                                    caption=newtext),
+                                                reply_markup=newmarkup)
                 case "print.right":
+
+                    # Получаем все записи по нашему запросу
+                    datesfromdatabase = self.importdatesfromdatabase(argument)
+
                     if int(commands[1]) >= len(datesfromdatabase):
                         indexforbottombuttons = len(datesfromdatabase)
                     else:
                         indexforbottombuttons = int(commands[1]) + 1
-                    newmarkup = self.bottombuttons(markupsendphoto, indexforbottombuttons, countmenues, len(datesfromdatabase))
-                    bot.edit_message_reply_markup(chat_id=call.message.chat.id,
-                                                        message_id=call.message.message_id,
-                                                        reply_markup=newmarkup)
+
+                    # Подготоваливаем данные для изменения
+                    newdatesforperson = self.createprofiledates(datesfromdatabase, indexforbottombuttons, images)
+                    print(newdatesforperson)
+                    newtext = newdatesforperson[2]
+                    newphoto = open(newdatesforperson[0], 'rb')
+                    newurl = newdatesforperson[1]
+                    newmarkup = self.bottombuttons(markupsendphoto, indexforbottombuttons, countmenues, newurl)
+
+                    # Изменение данных сообщения
+                    bot.edit_message_media(chat_id=call.message.chat.id,
+                                           message_id=call.message.message_id,
+                                           media=telebot.types.InputMedia(
+                                               type='photo',
+                                               media=newphoto,
+                                               caption=newtext),
+                                           reply_markup=newmarkup)

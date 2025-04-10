@@ -58,13 +58,13 @@ def textmessage(message):
                                  reply_markup=buttonsmarkup.retunmarkup("Мой профиль"))
         case "Найти тренера":
             # Инициализация класса отвечающего за поиск
-            searchprof = searchprofiles(bot, message)
-            searchprof.printdates("Тренер", bot, imagestouser)
+            searchproftrainer = searchprofiles(bot, message)
+            searchproftrainer.printdates( "Тренер", bot, imagestouser)
 
         case "Найти спортсмена" | "Найти партнёра для занятий спортом":
             # Инициализация класса отвечающего за поиск
-            searchprof = searchprofiles(bot, message)
-            searchprof.printdates("Спортсмен", bot, imagestouser)
+            searchprofsportsmen = searchprofiles(bot, message)
+            searchprofsportsmen.printdates("Спортсмен", bot, imagestouser)
 
         case "Мой профиль для других":
             # Инициализация класса отвечающего за профиль
