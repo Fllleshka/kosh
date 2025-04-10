@@ -36,8 +36,14 @@ def textmessage(message):
                 bot.send_message(message.chat.id, messagestouser.messageprofilealreadyexists,
                                  reply_markup=buttonsmarkup.retunmarkup("Тренер"))
         case "🏅Я спортсмен🏅":
-            bot.send_message(message.chat.id, "Проверяем наличие профиля в базе...",
-                             reply_markup=buttonsmarkup.retunmarkup("Спортсмен"))
+            # Инициализация класса отвечающего за профиль
+            profileinf = profile(bot, messagestouser, buttonsmarkup, imagestouser, tids)
+            # Проверка на существование профиля в базе данных
+            if (profileinf.existencecheck(message) == False):
+                profileinf.first_name(message)
+            else:
+                bot.send_message(message.chat.id, messagestouser.messageprofilealreadyexists,
+                                 reply_markup=buttonsmarkup.retunmarkup("Спортсмен"))
         case "🧐Я просто интересуюсь🧐" | "Получить полезную информацию о спорте":
             bot.send_message(message.chat.id, messagestouser.interestinginfo,
                              reply_markup=buttonsmarkup.retunmarkup("Ссылка на канал"))

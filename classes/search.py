@@ -35,7 +35,6 @@ class searchprofiles:
 
     # Создание кнопок внизу списка
     def bottombuttons(self, markup, index, countmenues, maxcount):
-        print(maxcount)
         leftcallbackdata = 'print.left|' + str(index)
         leftbutton = telebot.types.InlineKeyboardButton("<", callback_data=leftcallbackdata)
         rightcallbackdata = 'print.right|' + str(index)
@@ -103,13 +102,21 @@ class searchprofiles:
             print(commands)
             match (commands[0]):
                 case "print.left":
+                    if int(commands[1]) <= 0:
+                        indexforbottombuttons = 0
+                    else:
+                        indexforbottombuttons = int(commands[1]) - 1
                     newtext = "test new text"
-                    newmarkup = self.bottombuttons(markupsendphoto, int(commands[1]) - 1, countmenues, len(datesfromdatabase))
+                    newmarkup = self.bottombuttons(markupsendphoto, indexforbottombuttons, countmenues, len(datesfromdatabase))
                     bot.edit_message_reply_markup(chat_id=call.message.chat.id,
                                                         message_id=call.message.message_id,
                                                         reply_markup=newmarkup)
                 case "print.right":
-                    newmarkup = self.bottombuttons(markupsendphoto, int(commands[1]) + 1, countmenues, len(datesfromdatabase))
+                    if int(commands[1]) >= len(datesfromdatabase):
+                        indexforbottombuttons = len(datesfromdatabase)
+                    else:
+                        indexforbottombuttons = int(commands[1]) + 1
+                    newmarkup = self.bottombuttons(markupsendphoto, indexforbottombuttons, countmenues, len(datesfromdatabase))
                     bot.edit_message_reply_markup(chat_id=call.message.chat.id,
                                                         message_id=call.message.message_id,
                                                         reply_markup=newmarkup)
