@@ -37,7 +37,10 @@ class searchprofiles:
     def bottombuttons(self, markup, index, countmenues, url):
 
         # Кнопка связаться
-        tgforsendphoto = telebot.types.InlineKeyboardButton("Связаться", url=url)
+        if url == "tg://user?id=None":
+            tgforsendphoto = telebot.types.InlineKeyboardButton("Связаться", callback_data = "wrong_url")
+        else:
+            tgforsendphoto = telebot.types.InlineKeyboardButton("Связаться", url=url)
         markup.add(tgforsendphoto)
         # Левая стрелка
         leftcallbackdata = 'print.left|' + str(index)
@@ -121,7 +124,7 @@ class searchprofiles:
                     newmarkup = self.bottombuttons(markupsendphoto, indexforbottombuttons, countmenues, newurl)
 
                     # Изменение данных сообщения
-                    bot.edit_message_media(chat_id=call.message.chat.id,
+                    self.bot.edit_message_media(chat_id=call.message.chat.id,
                                                 message_id=call.message.message_id,
                                                 media=telebot.types.InputMedia(
                                                     type='photo',
@@ -147,10 +150,12 @@ class searchprofiles:
                     newmarkup = self.bottombuttons(markupsendphoto, indexforbottombuttons, countmenues, newurl)
 
                     # Изменение данных сообщения
-                    bot.edit_message_media(chat_id=call.message.chat.id,
+                    self.bot.edit_message_media(chat_id=call.message.chat.id,
                                            message_id=call.message.message_id,
                                            media=telebot.types.InputMedia(
                                                type='photo',
                                                media=newphoto,
                                                caption=newtext),
                                            reply_markup=newmarkup)
+                case "wrong_url":
+                    self.bot.answer_callback_query(callback_query_id=call.id, text="Хм...\n\nНаписать не получится(\nCсылка на профиль битая(")
