@@ -69,6 +69,11 @@ def textmessage(message):
         case "Мой профиль для других":
             # Инициализация класса отвечающего за профиль
             selectdatesfromprofile(message, imagestouser, bot)
+
+        case "Отредактировать профиль":
+            # Инициализация класса отвечающего за профиль
+            profileinf = profile(bot, messagestouser, buttonsmarkup, imagestouser, tids)
+            profileinf.editprofile(message, imagestouser, bot)
         case _:
             bot.reply_to(message, messagestouser.wrongcommand, reply_markup = buttonsmarkup.retunmarkup())
 

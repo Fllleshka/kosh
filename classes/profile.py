@@ -27,7 +27,6 @@ class profile:
         self.birth_date_date = ""
         self.raiting = 0
         self.telegramid = None
-
         self.town_date = ""
         self.town_date_name = ""
         self.typesport_date = ""
@@ -323,7 +322,7 @@ class profile:
         self.bot.register_next_step_handler(message, self.sendalldatestoserver2)
 
     # Записываем данные в базу данных
-    def sendalldatestoserver2(self,message):
+    def sendalldatestoserver2(self, message):
         if message.text == "Отправить данные на сервер":
             # Формируем данные для INSERT в базу данных
             insertdates = (self.first_name_date, self.middle_name_date, self.last_name_date, self.birth_date_date, self.raiting, self.telegramid,
@@ -344,6 +343,119 @@ class profile:
             # Отправка сообщения, что данные успешно записаны
             self.bot.reply_to(message, self.messagestouser.wrongcommand,
                               reply_markup=self.buttonsmarkup.retunmarkup())
+
+    # Функция изменения профиля
+    def editprofile(self, message, imagetouser, bot):
+        print("Функция редактирования профиля")
+
+        # Создаём кнопки для редактирования
+        markup = telebot.types.InlineKeyboardMarkup()
+        btnlastname = telebot.types.InlineKeyboardButton("Фамилия", callback_data = "lastname")
+        markup.add(btnlastname)
+        btnfirstname = telebot.types.InlineKeyboardButton("Имя", callback_data = "firstname")
+        markup.add(btnfirstname)
+        btnmiddlename = telebot.types.InlineKeyboardButton("Отчество", callback_data="middlename")
+        markup.add(btnmiddlename)
+        age = telebot.types.InlineKeyboardButton("Возраст", callback_data="age")
+        markup.add(age)
+        typesport = telebot.types.InlineKeyboardButton("Вид спорта", callback_data="typesport")
+        markup.add(typesport)
+        levelsport = telebot.types.InlineKeyboardButton("Уровень подготовки спорта", callback_data="levelsport")
+        markup.add(levelsport)
+        place = telebot.types.InlineKeyboardButton("Место проведения", callback_data="place")
+        markup.add(place)
+        typeaccaunt = telebot.types.InlineKeyboardButton("Тип аккаунта", callback_data="typeaccaunt")
+        markup.add(typeaccaunt)
+        discription = telebot.types.InlineKeyboardButton("Описание", callback_data="discription")
+        markup.add(discription)
+
+        # Отправляем сообщение пользователю
+        bot.send_message(message.chat.id, "Что бы ты хотел поменять в своём профиле?", reply_markup=markup)
+
+        @bot.callback_query_handler(func=lambda call: True)
+        def callbackdata(call):
+            match(call.data):
+                case ('lastname'):
+                    print("Редактирование Фамилии")
+                    text = "Хорошо. Введи пожалуйста новую Фамилию"
+
+                case ('firstname'):
+                    print("Редактирование Имени")
+                    text = "Хорошо. Введи пожалуйста новую Имя"
+
+                case ('middlename'):
+                    print("Редактирование Отчества")
+                    text = "Хорошо. Введи пожалуйста новую Отчество"
+
+                case ('age'):
+                    print("Редактирование возраста")
+                    text = "Хорошо. Введи пожалуйста новую Дату Рождения"
+
+                case ('typesport'):
+                    print("Редактирование вид спорта")
+                    text = "Хорошо. Введи пожалуйста новый вид спорта"
+
+                case('levelsport'):
+                    print("Редактирование уровень спорта")
+                    text = "Хорошо. Введи пожалуйста свой новый уровень"
+
+                case('place'):
+                    print("Редактирование место проведения")
+                    text = "Хорошо. Введи пожалуйста новое место занятий"
+
+                case('typeaccaunt'):
+                    print("Редактирование тип аккаунта")
+                    text = "Хорошо. Введи пожалуйста новый тип аккаунта"
+
+                case('discription'):
+                    print("Редактирование описания")
+                    text = "Хорошо. Введи пожалуйста новое описание"
+
+                case _:
+                    self.bot.answer_callback_query(callback_query_id=call.id,
+                                           text="Что-то пошло не так(")
+
+            replymessage = bot.reply_to(message, text)
+            bot.register_next_step_handler(replymessage, chengedata, call.data)
+
+        def chengedata(message, data):
+
+            match (data):
+                case ('lastname'):
+                    text = "Хорошо. Введи пожалуйста новую Фамилию"
+
+                case ('firstname'):
+                    print("Редактирование Имени")
+                    text = "Хорошо. Введи пожалуйста новую Имя"
+
+                case ('middlename'):
+                    print("Редактирование Отчества")
+                    text = "Хорошо. Введи пожалуйста новую Отчество"
+
+                case ('age'):
+                    print("Редактирование возраста")
+                    text = "Хорошо. Введи пожалуйста новую Дату Рождения"
+
+                case ('typesport'):
+                    print("Редактирование вид спорта")
+                    text = "Хорошо. Введи пожалуйста новый вид спорта"
+
+                case ('levelsport'):
+                    print("Редактирование уровень спорта")
+                    text = "Хорошо. Введи пожалуйста свой новый уровень"
+
+                case ('place'):
+                    print("Редактирование место проведения")
+                    text = "Хорошо. Введи пожалуйста новое место занятий"
+
+                case ('typeaccaunt'):
+                    print("Редактирование тип аккаунта")
+                    text = "Хорошо. Введи пожалуйста новый тип аккаунта"
+
+                case ('discription'):
+                    print("Редактирование описания")
+                    text = "Хорошо. Введи пожалуйста новое описание"
+
 
 # Функция запроса к базе данных
 def requestfordatabase(request, telegramid):
@@ -424,7 +536,7 @@ def selectdatesfromprofile(message, imagestouser, bot):
 
     description = dates[12]
 
-    messagetosenduser += "8. Описание:\n          " + str(description)
+    messagetosenduser += "9. Описание:\n          " + str(description)
 
     # Формирование пути к фактографии
     pathtoimage = imagestouser.startpathprofile + str(telegramid) + "/profile.png"
