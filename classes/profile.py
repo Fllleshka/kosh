@@ -222,7 +222,7 @@ class profile:
         req = "SELECT * FROM level_training ORDER BY name"
         # Полученные из базы данные
         dates = base.selectfromdatabase(req)
-        # Формируем список всех городов
+        # Формируем список всех уровней
         levels = []
         for elem in dates:
             levels.append(elem[1])
@@ -400,20 +400,57 @@ class profile:
         # Функция генерации кнопок под категории которые выбираются.
         def choosemarkup(argument):
             # Создание меню
-            newmarkup = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
-            # Инициализация кнопок
-            buttonsmarkup = buttons()
-
+            #newmarkup = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
             match (argument):
                 case ('typesport'):
-                    pass
+                    # Запрос к базе данных по имеющимся
+                    base = DataBase(pathtodatabase)
+                    req = "SELECT * FROM kind_sport ORDER BY name"
+                    # Полученные из базы данные
+                    dates = base.selectfromdatabase(req)
+                    # Формируем список всех видов спорта
+                    sports = []
+                    for elem in dates:
+                        sports.append(elem[1])
+                    # Формируем кнопки
+                    newmarkup = self.buttonsmarkup.retunmarkup("Тип спорта", sports)
                 case ('levelsport'):
-                    pass
+                    # Запрос к базе данных по имеющимся городам
+                    base = DataBase(pathtodatabase)
+                    req = "SELECT * FROM level_training ORDER BY name"
+                    # Полученные из базы данные
+                    dates = base.selectfromdatabase(req)
+                    # Формируем список всех уровней
+                    levels = []
+                    for elem in dates:
+                        levels.append(elem[1])
+                    # Формируем кнопки
+                    newmarkup = self.buttonsmarkup.retunmarkup("Уровень", levels)
                 case ('place'):
-                    pass
+                    # Запрос к базе данных по имеющимся городам
+                    base = DataBase(pathtodatabase)
+                    req = "SELECT * FROM place ORDER BY name"
+                    # Полученные из базы данные
+                    dates = base.selectfromdatabase(req)
+                    # Формируем список всех типов мест
+                    places = []
+                    for elem in dates:
+                        places.append(elem[1])
+                    # Формируем кнопки
+                    newmarkup = self.buttonsmarkup.retunmarkup("Уровень", places)
                 case ('typeaccaunt'):
-                    pass
-
+                    # Запрос к базе данных по имеющимся городам
+                    base = DataBase(pathtodatabase)
+                    req = "SELECT * FROM accaunt_type ORDER BY name"
+                    # Полученные из базы данные
+                    dates = base.selectfromdatabase(req)
+                    # Формируем список всех типов аккаунтов
+                    types = []
+                    for elem in dates:
+                        if elem[1] != "Администратор":
+                            types.append(elem[1])
+                    # Формируем кнопки
+                    newmarkup = self.buttonsmarkup.retunmarkup("Уровень", types)
             return newmarkup
 
         @bot.callback_query_handler(func=lambda call: True)
@@ -422,8 +459,9 @@ class profile:
             text = choosetext(call.data)
             markuptomessage = choosemarkup(call.data)
             if text == None:
-                self.bot.answer_callback_query(callback_query_id=call.id, text="Что-то пошло не так(", markup = markuptomessage)
-            replymessage = bot.reply_to(message, text)
+                self.bot.answer_callback_query(callback_query_id=call.id, text="Что-то пошло не так(")
+            # Отправляем сообщение пользователю
+            replymessage = bot.send_message(message.chat.id, text, reply_markup=markuptomessage)
             bot.register_next_step_handler(replymessage, chengedata, call.data)
 
         # Функция выбора запроса для изменения данных
@@ -463,9 +501,7 @@ class profile:
             # Закрываем соединение с базой
             connection.close()
             # Оповещаем пользователя, что всё удачно
-            bot.send_message(message.chat.id, "Данные в базу записаны")
-
-
+            bot.send_message(message.chat.id, "Данные в базу записаны", reply_markup=self.buttonsmarkup.retunmarkup("Мой профиль"))
 
 # Функция запроса к базе данных
 def requestfordatabase(request, telegramid):
