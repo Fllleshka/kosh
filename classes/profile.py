@@ -372,89 +372,99 @@ class profile:
         # Отправляем сообщение пользователю
         bot.send_message(message.chat.id, "Что бы ты хотел поменять в своём профиле?", reply_markup=markup)
 
+        # Функция выбора текста для отправки
+        def choosetext(argument):
+            match(argument):
+                case ('lastname'):
+                    text = "Хорошо. Введи пожалуйста новую Фамилию"
+                case ('firstname'):
+                    text = "Хорошо. Введи пожалуйста новую Имя"
+                case ('middlename'):
+                    text = "Хорошо. Введи пожалуйста новую Отчество"
+                case ('age'):
+                    text = "Хорошо. Введи пожалуйста новую Дату Рождения"
+                case ('typesport'):
+                    text = "Хорошо. Введи пожалуйста новый вид спорта"
+                case('levelsport'):
+                    text = "Хорошо. Введи пожалуйста свой новый уровень"
+                case('place'):
+                    text = "Хорошо. Введи пожалуйста новое место занятий"
+                case('typeaccaunt'):
+                    text = "Хорошо. Введи пожалуйста новый тип аккаунта"
+                case('discription'):
+                    text = "Хорошо. Введи пожалуйста новое описание"
+                case _:
+                    text = None
+            return text
+
+        # Функция генерации кнопок под категории которые выбираются.
+        def choosemarkup(argument):
+            # Создание меню
+            newmarkup = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
+            # Инициализация кнопок
+            buttonsmarkup = buttons()
+
+            match (argument):
+                case ('typesport'):
+                    pass
+                case ('levelsport'):
+                    pass
+                case ('place'):
+                    pass
+                case ('typeaccaunt'):
+                    pass
+
+            return newmarkup
+
         @bot.callback_query_handler(func=lambda call: True)
         def callbackdata(call):
-            match(call.data):
-                case ('lastname'):
-                    print("Редактирование Фамилии")
-                    text = "Хорошо. Введи пожалуйста новую Фамилию"
-
-                case ('firstname'):
-                    print("Редактирование Имени")
-                    text = "Хорошо. Введи пожалуйста новую Имя"
-
-                case ('middlename'):
-                    print("Редактирование Отчества")
-                    text = "Хорошо. Введи пожалуйста новую Отчество"
-
-                case ('age'):
-                    print("Редактирование возраста")
-                    text = "Хорошо. Введи пожалуйста новую Дату Рождения"
-
-                case ('typesport'):
-                    print("Редактирование вид спорта")
-                    text = "Хорошо. Введи пожалуйста новый вид спорта"
-
-                case('levelsport'):
-                    print("Редактирование уровень спорта")
-                    text = "Хорошо. Введи пожалуйста свой новый уровень"
-
-                case('place'):
-                    print("Редактирование место проведения")
-                    text = "Хорошо. Введи пожалуйста новое место занятий"
-
-                case('typeaccaunt'):
-                    print("Редактирование тип аккаунта")
-                    text = "Хорошо. Введи пожалуйста новый тип аккаунта"
-
-                case('discription'):
-                    print("Редактирование описания")
-                    text = "Хорошо. Введи пожалуйста новое описание"
-
-                case _:
-                    self.bot.answer_callback_query(callback_query_id=call.id,
-                                           text="Что-то пошло не так(")
-
+            # Выбор текста для отправки
+            text = choosetext(call.data)
+            markuptomessage = choosemarkup(call.data)
+            if text == None:
+                self.bot.answer_callback_query(callback_query_id=call.id, text="Что-то пошло не так(", markup = markuptomessage)
             replymessage = bot.reply_to(message, text)
             bot.register_next_step_handler(replymessage, chengedata, call.data)
 
-        def chengedata(message, data):
-
-            match (data):
+        # Функция выбора запроса для изменения данных
+        def choosesql(argument, telegramid, mess):
+            startsql = "UPDATE users SET "
+            endsql = "WHERE id_telegram=" + str(telegramid)
+            match (argument):
                 case ('lastname'):
-                    text = "Хорошо. Введи пожалуйста новую Фамилию"
-
+                    sql = startsql + "last_name='" + str(mess) + "' " + endsql
                 case ('firstname'):
-                    print("Редактирование Имени")
-                    text = "Хорошо. Введи пожалуйста новую Имя"
-
+                    sql = startsql + "first_name='" + str(mess) + "' " + endsql
                 case ('middlename'):
-                    print("Редактирование Отчества")
-                    text = "Хорошо. Введи пожалуйста новую Отчество"
-
+                    sql = startsql + "middle_name='" + str(mess) + "' " + endsql
                 case ('age'):
-                    print("Редактирование возраста")
-                    text = "Хорошо. Введи пожалуйста новую Дату Рождения"
-
+                    sql = startsql + "birth_date='" + str(mess) + "' " + endsql
                 case ('typesport'):
-                    print("Редактирование вид спорта")
-                    text = "Хорошо. Введи пожалуйста новый вид спорта"
-
+                    sql = startsql + "id_type='" + str(mess) + "' " + endsql
                 case ('levelsport'):
-                    print("Редактирование уровень спорта")
-                    text = "Хорошо. Введи пожалуйста свой новый уровень"
-
+                    sql = startsql + "id_level='" + str(mess) + "' " + endsql
                 case ('place'):
-                    print("Редактирование место проведения")
-                    text = "Хорошо. Введи пожалуйста новое место занятий"
-
+                    sql = startsql + "id_place='" + str(mess) + "' " + endsql
                 case ('typeaccaunt'):
-                    print("Редактирование тип аккаунта")
-                    text = "Хорошо. Введи пожалуйста новый тип аккаунта"
-
+                    sql = startsql + "id_type='" + str(mess) + "' " + endsql
                 case ('discription'):
-                    print("Редактирование описания")
-                    text = "Хорошо. Введи пожалуйста новое описание"
+                    sql = startsql + "description='" + str(mess) + "' " + endsql
+            return sql
+
+        # Функция изменения данных
+        def chengedata(message, data):
+            sql = choosesql(data,  message.chat.id, message.text)
+            # Подключаемся к базе данных
+            connection = sqlite3.connect(self.pathdatabase)
+            # Выполняем обновление в базе
+            cursor = connection.cursor()
+            cursor.execute(sql)
+            connection.commit()
+            # Закрываем соединение с базой
+            connection.close()
+            # Оповещаем пользователя, что всё удачно
+            bot.send_message(message.chat.id, "Данные в базу записаны")
+
 
 
 # Функция запроса к базе данных
