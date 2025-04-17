@@ -68,7 +68,7 @@ class buttons:
                         markup.add(button1, button2)
                 markup.add(self.btn11)
 
-            case "Уровень" | "Места" | "Тип аккаунта":
+            case "Уровень" | "Места" | "Тип аккаунта" | "Город":
                 for elem in dates:
                     markup.add(elem)
 
@@ -82,6 +82,9 @@ class buttons:
             case "Добавление данных":
                 markup = telebot.types.InlineKeyboardMarkup()
                 markup.add(self.btntelegramchannel)
+
+            case "Назад":
+                pass
 
             case _:
                 markup.add(self.btn1)

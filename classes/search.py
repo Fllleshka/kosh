@@ -84,7 +84,8 @@ class searchprofiles:
         if len(datesfromdatabase) != 0:
 
             # Определяем количество строк нужных нам в нашем списке
-            countmenues = len(datesfromdatabase)
+            countmenues = len(datesfromdatabase) - 1
+            print("Количество строк в массиве: ", countmenues)
 
             datesforsendphoto = self.createprofiledates(datesfromdatabase, 0, images)
             markupsendphoto = telebot.types.InlineKeyboardMarkup()

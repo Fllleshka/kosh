@@ -88,7 +88,6 @@ class profile:
 
     # Функция вычисления id в зависимой таблице
     def seart_id_in_database(self, dates, table):
-        id = 0
         match(table):
             case "town":
                 # Запрос к базе данных по id выбранного города
@@ -326,7 +325,7 @@ class profile:
         if message.text == "Отправить данные на сервер":
             # Формируем данные для INSERT в базу данных
             insertdates = (self.first_name_date, self.middle_name_date, self.last_name_date, self.birth_date_date, self.raiting, self.telegramid,
-                     self.town_date, self.typesport_date, self.level_date, self.typesport_date, self.place_date, self.description_date)
+                     self.town_date, self.accaunt_type, self.level_date, self.typesport_date, self.place_date, self.description_date)
             # Добавление данных в базу данных
             # Подключаемся к базе данных
             connection = sqlite3.connect(self.pathdatabase)
@@ -336,9 +335,17 @@ class profile:
             cursor.execute(request, insertdates)
             connection.commit()
             connection.close()
+            # Определяем какое меню вывести
+            if self.accaunt_type == 1:
+                textformarkup = "Тренер"
+            elif self.accaunt_type == 2:
+                textformarkup = "Спортсмен"
+            else:
+                textformarkup = None
+
             # Отправка сообщения, что данные успешно записаны
             self.bot.reply_to(message, self.messagestouser.messageinsertdatesindatabase,
-                              reply_markup=self.buttonsmarkup.retunmarkup())
+                              reply_markup=self.buttonsmarkup.retunmarkup(textformarkup))
         else:
             # Отправка сообщения, что данные успешно записаны
             self.bot.reply_to(message, self.messagestouser.wrongcommand,
@@ -358,6 +365,8 @@ class profile:
         markup.add(btnmiddlename)
         age = telebot.types.InlineKeyboardButton("Возраст", callback_data="age")
         markup.add(age)
+        town = telebot.types.InlineKeyboardButton("Город", callback_data="town")
+        markup.add(town)
         typesport = telebot.types.InlineKeyboardButton("Вид спорта", callback_data="typesport")
         markup.add(typesport)
         levelsport = telebot.types.InlineKeyboardButton("Уровень подготовки спорта", callback_data="levelsport")
@@ -385,6 +394,8 @@ class profile:
                     text = "Хорошо. Введи пожалуйста новую Дату Рождения"
                 case ('typesport'):
                     text = "Хорошо. Введи пожалуйста новый вид спорта"
+                case ('town'):
+                    text = "Хорошо. Введи пожалуйста новый город"
                 case('levelsport'):
                     text = "Хорошо. Введи пожалуйста свой новый уровень"
                 case('place'):
@@ -400,8 +411,21 @@ class profile:
         # Функция генерации кнопок под категории которые выбираются.
         def choosemarkup(argument):
             # Создание меню
-            #newmarkup = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
+            newmarkup = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
             match (argument):
+                case('town'):
+                    # Запрос к базе данных по имеющимся
+                    base = DataBase(pathtodatabase)
+                    req = "SELECT * FROM town ORDER BY name"
+                    # Полученные из базы данные
+                    dates = base.selectfromdatabase(req)
+                    # Формируем список всех видов спорта
+                    towns = []
+                    for elem in dates:
+                        towns.append(elem[1])
+                    # Формируем кнопки
+                    newmarkup = self.buttonsmarkup.retunmarkup("Тип спорта", towns)
+
                 case ('typesport'):
                     # Запрос к базе данных по имеющимся
                     base = DataBase(pathtodatabase)
@@ -413,7 +437,7 @@ class profile:
                     for elem in dates:
                         sports.append(elem[1])
                     # Формируем кнопки
-                    newmarkup = self.buttonsmarkup.retunmarkup("Тип спорта", sports)
+                    newmarkup = self.buttonsmarkup.retunmarkup("Город", sports)
                 case ('levelsport'):
                     # Запрос к базе данных по имеющимся городам
                     base = DataBase(pathtodatabase)
@@ -437,7 +461,7 @@ class profile:
                     for elem in dates:
                         places.append(elem[1])
                     # Формируем кнопки
-                    newmarkup = self.buttonsmarkup.retunmarkup("Уровень", places)
+                    newmarkup = self.buttonsmarkup.retunmarkup("Места", places)
                 case ('typeaccaunt'):
                     # Запрос к базе данных по имеющимся городам
                     base = DataBase(pathtodatabase)
@@ -450,7 +474,7 @@ class profile:
                         if elem[1] != "Администратор":
                             types.append(elem[1])
                     # Формируем кнопки
-                    newmarkup = self.buttonsmarkup.retunmarkup("Уровень", types)
+                    newmarkup = self.buttonsmarkup.retunmarkup("Тип аккаунта", types)
             return newmarkup
 
         @bot.callback_query_handler(func=lambda call: True)
@@ -463,6 +487,8 @@ class profile:
             # Отправляем сообщение пользователю
             replymessage = bot.send_message(message.chat.id, text, reply_markup=markuptomessage)
             bot.register_next_step_handler(replymessage, chengedata, call.data)
+
+
 
         # Функция выбора запроса для изменения данных
         def choosesql(argument, telegramid, mess):
@@ -477,14 +503,16 @@ class profile:
                     sql = startsql + "middle_name='" + str(mess) + "' " + endsql
                 case ('age'):
                     sql = startsql + "birth_date='" + str(mess) + "' " + endsql
+                case ('town'):
+                    sql = startsql + "id_type='" + str(self.seart_id_in_database(mess, "town")) + "' " + endsql
                 case ('typesport'):
-                    sql = startsql + "id_type='" + str(mess) + "' " + endsql
+                    sql = startsql + "id_type='" + str(self.seart_id_in_database(mess, "type_sport")) + "' " + endsql
                 case ('levelsport'):
-                    sql = startsql + "id_level='" + str(mess) + "' " + endsql
+                    sql = startsql + "id_level='" + str(self.seart_id_in_database(mess, "level_training")) + "' " + endsql
                 case ('place'):
-                    sql = startsql + "id_place='" + str(mess) + "' " + endsql
+                    sql = startsql + "id_place='" + str(self.seart_id_in_database(mess, "place")) + "' " + endsql
                 case ('typeaccaunt'):
-                    sql = startsql + "id_type='" + str(mess) + "' " + endsql
+                    sql = startsql + "id_type='" + str(self.seart_id_in_database(mess, "accaunt_type")) + "' " + endsql
                 case ('discription'):
                     sql = startsql + "description='" + str(mess) + "' " + endsql
             return sql
