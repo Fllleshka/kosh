@@ -68,7 +68,7 @@ class buttons:
                         markup.add(button1, button2)
                 markup.add(self.btn11)
 
-            case "Уровень" | "Места" | "Тип аккаунта" | "Город":
+            case "Уровень" | "Места" | "Тип аккаунта" | "Город" | "Типы спортов":
                 for elem in dates:
                     markup.add(elem)
 

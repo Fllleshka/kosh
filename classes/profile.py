@@ -381,6 +381,17 @@ class profile:
         # Отправляем сообщение пользователю
         bot.send_message(message.chat.id, "Что бы ты хотел поменять в своём профиле?", reply_markup=markup)
 
+        @bot.callback_query_handler(func=lambda call: True)
+        def callbackdata(call):
+            # Выбор текста для отправки
+            text = choosetext(call.data)
+            markuptomessage = choosemarkup(call.data)
+            if text == None:
+                self.bot.answer_callback_query(callback_query_id=call.id, text="Что-то пошло не так(")
+            # Отправляем сообщение пользователю
+            replymessage = bot.send_message(message.chat.id, text, reply_markup=markuptomessage)
+            bot.register_next_step_handler(replymessage, chengedata, call.data)
+
         # Функция выбора текста для отправки
         def choosetext(argument):
             match(argument):
@@ -424,7 +435,7 @@ class profile:
                     for elem in dates:
                         towns.append(elem[1])
                     # Формируем кнопки
-                    newmarkup = self.buttonsmarkup.retunmarkup("Тип спорта", towns)
+                    newmarkup = self.buttonsmarkup.retunmarkup("Города", towns)
 
                 case ('typesport'):
                     # Запрос к базе данных по имеющимся
@@ -437,7 +448,8 @@ class profile:
                     for elem in dates:
                         sports.append(elem[1])
                     # Формируем кнопки
-                    newmarkup = self.buttonsmarkup.retunmarkup("Город", sports)
+                    newmarkup = self.buttonsmarkup.retunmarkup("Тип спорта", sports)
+
                 case ('levelsport'):
                     # Запрос к базе данных по имеющимся городам
                     base = DataBase(pathtodatabase)
@@ -450,6 +462,7 @@ class profile:
                         levels.append(elem[1])
                     # Формируем кнопки
                     newmarkup = self.buttonsmarkup.retunmarkup("Уровень", levels)
+
                 case ('place'):
                     # Запрос к базе данных по имеющимся городам
                     base = DataBase(pathtodatabase)
@@ -462,6 +475,7 @@ class profile:
                         places.append(elem[1])
                     # Формируем кнопки
                     newmarkup = self.buttonsmarkup.retunmarkup("Места", places)
+
                 case ('typeaccaunt'):
                     # Запрос к базе данных по имеющимся городам
                     base = DataBase(pathtodatabase)
@@ -475,20 +489,8 @@ class profile:
                             types.append(elem[1])
                     # Формируем кнопки
                     newmarkup = self.buttonsmarkup.retunmarkup("Тип аккаунта", types)
+
             return newmarkup
-
-        @bot.callback_query_handler(func=lambda call: True)
-        def callbackdata(call):
-            # Выбор текста для отправки
-            text = choosetext(call.data)
-            markuptomessage = choosemarkup(call.data)
-            if text == None:
-                self.bot.answer_callback_query(callback_query_id=call.id, text="Что-то пошло не так(")
-            # Отправляем сообщение пользователю
-            replymessage = bot.send_message(message.chat.id, text, reply_markup=markuptomessage)
-            bot.register_next_step_handler(replymessage, chengedata, call.data)
-
-
 
         # Функция выбора запроса для изменения данных
         def choosesql(argument, telegramid, mess):
@@ -504,9 +506,9 @@ class profile:
                 case ('age'):
                     sql = startsql + "birth_date='" + str(mess) + "' " + endsql
                 case ('town'):
-                    sql = startsql + "id_type='" + str(self.seart_id_in_database(mess, "town")) + "' " + endsql
+                    sql = startsql + "id_town='" + str(self.seart_id_in_database(mess, "town")) + "' " + endsql
                 case ('typesport'):
-                    sql = startsql + "id_type='" + str(self.seart_id_in_database(mess, "type_sport")) + "' " + endsql
+                    sql = startsql + "id_kind='" + str(self.seart_id_in_database(mess, "type_sport")) + "' " + endsql
                 case ('levelsport'):
                     sql = startsql + "id_level='" + str(self.seart_id_in_database(mess, "level_training")) + "' " + endsql
                 case ('place'):
@@ -519,7 +521,13 @@ class profile:
 
         # Функция изменения данных
         def chengedata(message, data):
+            print("===============")
+            print(data)
+            print(message.chat.id)
+            print(message.text)
             sql = choosesql(data,  message.chat.id, message.text)
+            print(sql)
+            print("===============")
             # Подключаемся к базе данных
             connection = sqlite3.connect(self.pathdatabase)
             # Выполняем обновление в базе
