@@ -86,6 +86,10 @@ class buttons:
             case "Назад":
                 pass
 
+            case "Регистрация|Возврат к вводу Имени":
+                # Создаём кнопки для редактирования
+                pass
+
             case _:
                 markup.add(self.btn1)
                 markup.add(self.btn2)

@@ -142,8 +142,9 @@ class profile:
         self.first_name_date = message.text
         # Отправляем сообщение
         self.bot.reply_to(message, self.messagestouser.messagecoachlastname,
-                            reply_markup=self.buttonsmarkup.retunmarkup("Null"))
+                          reply_markup=self.buttonsmarkup.retunmarkup("Null"))
         self.bot.register_next_step_handler(message, self.middle_name)
+
 
     # Добавление отчество для тренера
     def middle_name(self, message):
