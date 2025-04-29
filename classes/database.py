@@ -125,7 +125,7 @@ class DataBase:
         # Возвращаем данные
         return result
 
-    # Функция наполения базы данных тестовыми данными:
+    # Функция наполнения базы данных тестовыми данными:
     def inserttestdatesintodatabase(self):
         # Подключаемся к базе данных
         connection = sqlite3.connect(self.pathdatabase)

@@ -17,6 +17,10 @@ if __name__ == "__main__":
 # Приветственное сообщение (обработка кнопки /start)
 @bot.message_handler(commands=['start'])
 def startmessage(message):
+    # Левое меню
+    menu = LeftMenu(bot)
+    menu.initmenu()
+
     # Отправка сообщения
     bot.send_photo(message.chat.id, photo=open(imagestouser.startimage, 'rb'),
                    caption=messagestouser.welcomemessage,
@@ -68,7 +72,7 @@ def textmessage(message):
 
         case "Мой профиль для других":
             # Инициализация класса отвечающего за профиль
-            selectdatesfromprofile(message, imagestouser, bot)
+            selectdatesfromprofile(message, imagestouser, bot, buttonsmarkup)
 
         case "Отредактировать профиль":
             # Инициализация класса отвечающего за профиль

@@ -8,6 +8,8 @@ from classes.buttons import *
 from classes.profile import *
 # Файл для работы с поиском
 from classes.search import *
+# Файл для работы с левым меню
+from classes.menu import *
 
 # Инициализация бота
 bot = telebot.TeleBot(tokenbot)

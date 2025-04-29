@@ -20,6 +20,7 @@ class buttons:
         self.btn12 = telebot.types.KeyboardButton("Мой профиль для других")
 
 
+
         self.btntelegramchannel = telebot.types.InlineKeyboardButton("Kosh Sports", telegrampath)
         self.sendinformation = telebot.types.KeyboardButton("Отправить данные на сервер")
         self.changeprofileinfo = telebot.types.KeyboardButton("Отредактировать профиль")

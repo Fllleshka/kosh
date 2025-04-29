@@ -541,7 +541,7 @@ class profile:
             bot.send_message(message.chat.id, "Данные в базу записаны", reply_markup=self.buttonsmarkup.retunmarkup("Мой профиль"))
 
 # Функция запроса к базе данных
-def requestfordatabase(request, telegramid):
+def requestfordatabase(request):
     # Запрос к базе данных
     base = DataBase(pathtodatabase)
     # Полученные из базы данные
@@ -552,11 +552,11 @@ def requestfordatabase(request, telegramid):
         return None
 
 # Вывод данный по существующему профилю
-def selectdatesfromprofile(message, imagestouser, bot):
+def selectdatesfromprofile(message, imagestouser, bot, buttonsmarkup):
     telegramid = message.chat.id
     # Полученные из базы данные
     req = "SELECT * FROM users WHERE id_telegram=" + str(telegramid)
-    dates = requestfordatabase(req, telegramid)
+    dates = requestfordatabase(req)
 
     # ФИО
     fio = dates[3] + " " + dates[1] + " " + dates[2]
@@ -579,7 +579,7 @@ def selectdatesfromprofile(message, imagestouser, bot):
 
     # Город
     req = "SELECT name FROM town, users where users.id_town = town.id_town AND users.id_telegram=" + str(telegramid)
-    town = requestfordatabase(req, telegramid)
+    town = requestfordatabase(req)
     if town == None:
         messagetosenduser += "4. Город:\n          Не выбран \n"
     else:
@@ -587,7 +587,7 @@ def selectdatesfromprofile(message, imagestouser, bot):
 
     # Вид спорта
     req = "SELECT name FROM kind_sport, users where users.id_kind=kind_sport.id_kind AND users.id_telegram=" + str(telegramid)
-    kind_sport = requestfordatabase(req, telegramid)
+    kind_sport = requestfordatabase(req)
     if kind_sport == None:
         messagetosenduser += "5. Вид спорта:\n          Не выбран \n"
     else:
@@ -595,7 +595,7 @@ def selectdatesfromprofile(message, imagestouser, bot):
 
     # Уроверь подготовки
     req = "SELECT name FROM level_training, users where users.id_level=level_training.id_level AND users.id_telegram=" + str(telegramid)
-    level_training = requestfordatabase(req, telegramid)
+    level_training = requestfordatabase(req)
     if level_training == None:
         messagetosenduser += "6. Уровень подготовки:\n          Не выбран \n"
     else:
@@ -603,15 +603,15 @@ def selectdatesfromprofile(message, imagestouser, bot):
 
     # Место проведения
     req = "SELECT name FROM place, users where users.id_place=place.id_place AND users.id_telegram=" + str(telegramid)
-    training_place = requestfordatabase(req, telegramid)
+    training_place = requestfordatabase(req)
     if training_place == None:
         messagetosenduser += "7. Место проведения:\n          Не выбран \n"
     else:
         messagetosenduser += "7. Место проведения:\n          " + str(training_place[0]) + "\n"
 
     # Тип аккаунта
-    req = "SELECT name FROM accaunt_type, users where users.id_place=accaunt_type.id_type AND users.id_telegram=" + str(telegramid)
-    accaunt_type = requestfordatabase(req, telegramid)
+    req = "SELECT name FROM accaunt_type, users where users.id_type=accaunt_type.id_type AND users.id_telegram=" + str(telegramid)
+    accaunt_type = requestfordatabase(req)
     if accaunt_type == None:
         messagetosenduser += "8. Тип аккаунта:\n          Не выбран \n"
     else:
@@ -626,4 +626,4 @@ def selectdatesfromprofile(message, imagestouser, bot):
 
     # Отправка профиля
     bot.send_photo(message.chat.id, photo=open(pathtoimage, 'rb'),
-                   caption=messagetosenduser)
+                   caption=messagetosenduser, reply_markup = buttonsmarkup.retunmarkup())
