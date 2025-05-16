@@ -108,55 +108,77 @@ class searchprofiles:
 
             match (commands[0]):
                 case "print.left":
-
-                    # Получаем все записи по нашему запросу
-                    datesfromdatabase = self.importdatesfromdatabase(argument)
-
-                    if int(commands[1]) <= 0:
-                        indexforbottombuttons = 0
+                    if self.checkleftbarruer(commands[1]) == True:
+                        self.bot.answer_callback_query(callback_query_id=call.id,
+                                                       text="Дальше нету анкет(\nЛистайте вправо...")
                     else:
-                        indexforbottombuttons = int(commands[1]) - 1
-                    # Подготоваливаем данные для изменения
-                    newdatesforperson = self.createprofiledates(datesfromdatabase, indexforbottombuttons, images)
-                    print(newdatesforperson)
-                    newtext = newdatesforperson[2]
-                    newphoto = open(newdatesforperson[0], 'rb')
-                    newurl = newdatesforperson[1]
-                    newmarkup = self.bottombuttons(markupsendphoto, indexforbottombuttons, countmenues, newurl)
+                        if int(commands[1]) <= 0:
+                            indexforbottombuttons = 0
+                        else:
+                            indexforbottombuttons = int(commands[1]) - 1
+                        # Получаем все записи по нашему запросу
+                        datesfromdatabase = self.importdatesfromdatabase(argument)
+                        # Подготоваливаем данные для изменения
+                        newdatesforperson = self.createprofiledates(datesfromdatabase, indexforbottombuttons, images)
+                        print(newdatesforperson)
+                        newtext = newdatesforperson[2]
+                        newphoto = open(newdatesforperson[0], 'rb')
+                        newurl = newdatesforperson[1]
+                        newmarkup = self.bottombuttons(markupsendphoto, indexforbottombuttons, countmenues, newurl)
 
-                    # Изменение данных сообщения
-                    self.bot.edit_message_media(chat_id=call.message.chat.id,
-                                                message_id=call.message.message_id,
-                                                media=telebot.types.InputMedia(
-                                                    type='photo',
-                                                    media=newphoto,
-                                                    caption=newtext),
-                                                reply_markup=newmarkup)
+                        # Изменение данных сообщения
+                        self.bot.edit_message_media(chat_id=call.message.chat.id,
+                                                    message_id=call.message.message_id,
+                                                    media=telebot.types.InputMedia(
+                                                        type='photo',
+                                                        media=newphoto,
+                                                        caption=newtext),
+                                                    reply_markup=newmarkup)
                 case "print.right":
-
+                    print(argument)
                     # Получаем все записи по нашему запросу
                     datesfromdatabase = self.importdatesfromdatabase(argument)
 
-                    if int(commands[1]) >= len(datesfromdatabase):
-                        indexforbottombuttons = len(datesfromdatabase)
+                    if self.checkrightbarruer(commands[1], datesfromdatabase) == True:
+                        self.bot.answer_callback_query(callback_query_id=call.id,
+                                                       text="Дальше нету анкет(\nЛистайте влево...")
                     else:
-                        indexforbottombuttons = int(commands[1]) + 1
+                        if int(commands[1]) >= len(datesfromdatabase):
+                            indexforbottombuttons = len(datesfromdatabase)
+                        else:
+                            indexforbottombuttons = int(commands[1]) + 1
 
-                    # Подготоваливаем данные для изменения
-                    newdatesforperson = self.createprofiledates(datesfromdatabase, indexforbottombuttons, images)
-                    print(newdatesforperson)
-                    newtext = newdatesforperson[2]
-                    newphoto = open(newdatesforperson[0], 'rb')
-                    newurl = newdatesforperson[1]
-                    newmarkup = self.bottombuttons(markupsendphoto, indexforbottombuttons, countmenues, newurl)
+                        # Подготоваливаем данные для изменения
+                        newdatesforperson = self.createprofiledates(datesfromdatabase, indexforbottombuttons, images)
+                        print(newdatesforperson)
+                        newtext = newdatesforperson[2]
+                        newphoto = open(newdatesforperson[0], 'rb')
+                        newurl = newdatesforperson[1]
+                        newmarkup = self.bottombuttons(markupsendphoto, indexforbottombuttons, countmenues, newurl)
 
-                    # Изменение данных сообщения
-                    self.bot.edit_message_media(chat_id=call.message.chat.id,
-                                           message_id=call.message.message_id,
-                                           media=telebot.types.InputMedia(
-                                               type='photo',
-                                               media=newphoto,
-                                               caption=newtext),
-                                           reply_markup=newmarkup)
+                        # Изменение данных сообщения
+                        self.bot.edit_message_media(chat_id=call.message.chat.id,
+                                               message_id=call.message.message_id,
+                                               media=telebot.types.InputMedia(
+                                                   type='photo',
+                                                   media=newphoto,
+                                                   caption=newtext),
+                                               reply_markup=newmarkup)
                 case "wrong_url":
                     self.bot.answer_callback_query(callback_query_id=call.id, text="Хм...\n\nНаписать не получится(\nCсылка на профиль битая(")
+
+    # Проверка нажатия кнопки влево при самой первой анкете
+    def checkleftbarruer(self, index):
+        print("Достингут левый барьер ", index, "\t", type(index))
+        if int(index) == 0:
+            return True
+        else:
+            return False
+
+    # Проверка нажатия кнопки право при самой последней анкете
+    def checkrightbarruer(self, index, dates):
+        print("Достингут правый барьер ", index, "\t", type(index), "\t", len(dates) - 1)
+        if int(index) == len(dates) - 1:
+            return True
+        else:
+            return False

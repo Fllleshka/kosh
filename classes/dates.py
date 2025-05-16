@@ -10,6 +10,9 @@ pathtoimagesusers = "images/users/"
 # Путь к телеграмм каналу
 telegrampath = "https://t.me/koshsports"
 
+# Путь к таблице соревнований
+googlesheetcompetitiontable = "https://docs.google.com/spreadsheets/d/1syWVu1NE3mKpWU1QUGuYyFVxUNsYjW8TCKq79VfII2g/edit?gid=0#gid=0"
+
 # Путь к администратору канала:
 adminchannel = "https://telegram.org/@fleshkaomsk"
 
@@ -64,6 +67,8 @@ class messages:
         self.messageinsertdatesindatabase = "Поздравляю, ты теперь вместе с нами!"
         # Сообщение о том что такой профиль уже найден в базе данных
         self.messageprofilealreadyexists = "Друг, твой профиль уже есть в системе."
+        # Сообщение про таблицу соревнований
+        self.messagecompetitiontable = "⬇️Ссылка на таблицу ниже⬇️"
 
 # Класс данных по админам:
 class telegramids:

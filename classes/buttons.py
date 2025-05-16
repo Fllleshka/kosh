@@ -16,12 +16,10 @@ class buttons:
         self.btn8 = telebot.types.KeyboardButton("Получить полезную информацию о спорте")
         self.btn9 = telebot.types.KeyboardButton("Мой профиль 💪")
         self.btn10 = telebot.types.KeyboardButton("Найти спортсмена")
-        self.btn11 = telebot.types.KeyboardButton("Моего варианта нету")
+        self.btn11 = telebot.types.KeyboardButton("Моего варианта нет")
         self.btn12 = telebot.types.KeyboardButton("Мой профиль для других")
-
-
-
         self.btntelegramchannel = telebot.types.InlineKeyboardButton("Kosh Sports", telegrampath)
+        self.competitiontable = telebot.types.InlineKeyboardButton("Kosh Sports Table", googlesheetcompetitiontable)
         self.sendinformation = telebot.types.KeyboardButton("Отправить данные на сервер")
         self.changeprofileinfo = telebot.types.KeyboardButton("Отредактировать профиль")
         self.sendmessageadmin = telebot.types.InlineKeyboardButton("Админ", adminchannel)
@@ -45,6 +43,10 @@ class buttons:
             case "Ссылка на канал":
                 markup = telebot.types.InlineKeyboardMarkup()
                 markup.add(self.btntelegramchannel)
+
+            case "Ссылка на таблицу соревнований":
+                markup = telebot.types.InlineKeyboardMarkup()
+                markup.add(self.competitiontable)
 
             case "Профиль тренера":
                 markup.add(self.btn10)
@@ -95,4 +97,5 @@ class buttons:
                 markup.add(self.btn1)
                 markup.add(self.btn2)
                 markup.add(self.btn3)
+
         return markup

@@ -145,7 +145,6 @@ class profile:
                           reply_markup=self.buttonsmarkup.retunmarkup("Null"))
         self.bot.register_next_step_handler(message, self.middle_name)
 
-
     # Добавление отчество для тренера
     def middle_name(self, message):
         self.last_name_date = message.text
@@ -311,7 +310,7 @@ class profile:
         messagetosenduser += "6. Место проведения:\n          " + str(self.place_date_name) + "\n"
         messagetosenduser += "7. Тип аккаунта:\n          " + str(self.accaunt_type_name) + "\n"
         messagetosenduser += "8. Описание:\n          " + self.description_date + "\n\n"
-        messagetosenduser += "⬇️Если всё ок, то нажми нажми внизу⬇️"
+        messagetosenduser += "⬇️Если всё ок, то нажми кнопку внизу⬇️"
 
         # Формирование пути к фактографии
         pathurl = self.imagestouser.startpathprofile + str(self.telegramid) + self.imagestouser.endpathprofile

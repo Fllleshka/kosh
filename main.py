@@ -74,6 +74,10 @@ def textmessage(message):
             # Инициализация класса отвечающего за профиль
             selectdatesfromprofile(message, imagestouser, bot, buttonsmarkup)
 
+        case "Принять участие в соревнованиях":
+            bot.send_message(message.chat.id, messagestouser.messagecompetitiontable,
+                     reply_markup=buttonsmarkup.retunmarkup("Ссылка на таблицу соревнований"))
+
         case "Отредактировать профиль":
             # Инициализация класса отвечающего за профиль
             profileinf = profile(bot, messagestouser, buttonsmarkup, imagestouser, tids)
