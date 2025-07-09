@@ -381,7 +381,7 @@ class profile:
         # Отправляем сообщение пользователю
         bot.send_message(message.chat.id, "Что бы ты хотел поменять в своём профиле?", reply_markup=markup)
 
-        @bot.callback_query_handler(func=lambda call: True)
+        @bot.callback_query_handler(func=lambda callback: callback.data == "lastname" or "middlename" or "age" or "town" or "typesport" or "levelsport" or "place" or "typeaccaunt" or "discription")
         def callbackdata(call):
             # Выбор текста для отправки
             text = choosetext(call.data)
@@ -396,25 +396,25 @@ class profile:
         def choosetext(argument):
             match(argument):
                 case ('lastname'):
-                    text = "Хорошо. Введи пожалуйста новую Фамилию"
+                    text = "Хорошо.\nВведи пожалуйста новую Фамилию"
                 case ('firstname'):
-                    text = "Хорошо. Введи пожалуйста новую Имя"
+                    text = "Хорошо.\nВведи пожалуйста новое Имя"
                 case ('middlename'):
-                    text = "Хорошо. Введи пожалуйста новую Отчество"
+                    text = "Хорошо.\nВведи пожалуйста новое Отчество"
                 case ('age'):
-                    text = "Хорошо. Введи пожалуйста новую Дату Рождения"
+                    text = "Хорошо.\nВведи пожалуйста новую Дату Рождения"
                 case ('typesport'):
-                    text = "Хорошо. Введи пожалуйста новый вид спорта"
+                    text = "Хорошо.\nВыбери пожалуйста новый вид спорта"
                 case ('town'):
-                    text = "Хорошо. Введи пожалуйста новый город"
+                    text = "Хорошо.\nВыбери пожалуйста новый город"
                 case('levelsport'):
-                    text = "Хорошо. Введи пожалуйста свой новый уровень"
+                    text = "Хорошо.\nВыбери пожалуйста свой новый уровень"
                 case('place'):
-                    text = "Хорошо. Введи пожалуйста новое место занятий"
+                    text = "Хорошо.\nВыбери пожалуйста новое место занятий"
                 case('typeaccaunt'):
-                    text = "Хорошо. Введи пожалуйста новый тип аккаунта"
+                    text = "Хорошо.\nВведи пожалуйста новый тип аккаунта"
                 case('discription'):
-                    text = "Хорошо. Введи пожалуйста новое описание"
+                    text = "Хорошо.\nВведи пожалуйста новое описание"
                 case _:
                     text = None
             return text

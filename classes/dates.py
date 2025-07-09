@@ -66,7 +66,7 @@ class messages:
         # Сообщения для успешной записи в базу данных
         self.messageinsertdatesindatabase = "Поздравляю, ты теперь вместе с нами!"
         # Сообщение о том что такой профиль уже найден в базе данных
-        self.messageprofilealreadyexists = "Друг, твой профиль уже есть в системе."
+        self.messageprofilealreadyexists = "Друг, твой профиль уже есть в системе.\nВыберите что будем делать с профилем."
         # Сообщение про таблицу соревнований
         self.messagecompetitiontable = "⬇️Ссылка на таблицу ниже⬇️"
 

@@ -3,10 +3,11 @@ from classes.imports import *
 class searchprofiles:
 
     # Инициализация переменных класса
-    def __init__(self, bot, message):
+    def __init__(self, bot, message, role):
         self.bot = bot
         self.message = message
         self.database = DataBase(pathtodatabase)
+        self.datesfromdatabase = self.importdatesfromdatabase(role)
 
     # Импорт всех данных
     def importdatesfromdatabase(self, argument):
@@ -74,20 +75,20 @@ class searchprofiles:
     def printdates(self, argument, bot, images):
 
         # Получаем все записи по нашему запросу
-        datesfromdatabase = self.importdatesfromdatabase(argument)
+        self.datesfromdatabase = self.importdatesfromdatabase(argument)
 
         print(f"======{argument}======")
-        for element in datesfromdatabase:
+        for element in self.datesfromdatabase:
             print(element)
         print(f"======{argument}======")
         # Проверка данные на наличие, если нет, то выводим сообщение
-        if len(datesfromdatabase) != 0:
+        if len(self.datesfromdatabase) != 0:
 
             # Определяем количество строк нужных нам в нашем списке
-            countmenues = len(datesfromdatabase) - 1
+            countmenues = len(self.datesfromdatabase) - 1
             print("Количество строк в массиве: ", countmenues)
 
-            datesforsendphoto = self.createprofiledates(datesfromdatabase, 0, images)
+            datesforsendphoto = self.createprofiledates(self.datesfromdatabase, 0, images)
             markupsendphoto = telebot.types.InlineKeyboardMarkup()
 
             # Кнопки навигации
@@ -103,6 +104,9 @@ class searchprofiles:
 
         @bot.callback_query_handler(func=lambda call: True)
         def callbackdata(call):
+            # Получаем все записи по нашему запросу
+            datesfromdatabase = self.importdatesfromdatabase(argument)
+            print("Работа функции обработки кнопок")
             markupsendphoto = telebot.types.InlineKeyboardMarkup()
             commands = call.data.split("|")
 
@@ -117,8 +121,8 @@ class searchprofiles:
                         else:
                             indexforbottombuttons = int(commands[1]) - 1
                         # Получаем все записи по нашему запросу
-                        datesfromdatabase = self.importdatesfromdatabase(argument)
-                        # Подготоваливаем данные для изменения
+                        #datesfromdatabase = self.importdatesfromdatabase(argument)
+                        # Подготавливаем данные для изменения
                         newdatesforperson = self.createprofiledates(datesfromdatabase, indexforbottombuttons, images)
                         print(newdatesforperson)
                         newtext = newdatesforperson[2]
@@ -137,9 +141,9 @@ class searchprofiles:
                 case "print.right":
                     print(argument)
                     # Получаем все записи по нашему запросу
-                    datesfromdatabase = self.importdatesfromdatabase(argument)
+                    #datesfromdatabase = self.importdatesfromdatabase(argument)
 
-                    if self.checkrightbarruer(commands[1], datesfromdatabase) == True:
+                    if self.checkrightbarruer(commands[1], self.datesfromdatabase) == True:
                         self.bot.answer_callback_query(callback_query_id=call.id,
                                                        text="Дальше нету анкет(\nЛистайте влево...")
                     else:
@@ -148,7 +152,7 @@ class searchprofiles:
                         else:
                             indexforbottombuttons = int(commands[1]) + 1
 
-                        # Подготоваливаем данные для изменения
+                        # Подготавливаем данные для изменения
                         newdatesforperson = self.createprofiledates(datesfromdatabase, indexforbottombuttons, images)
                         print(newdatesforperson)
                         newtext = newdatesforperson[2]
